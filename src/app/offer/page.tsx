@@ -2,7 +2,6 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
-import MessageScreen from "@/components/MessageScreen";
 
 export default function Home() {
   // 必要に応じて状態管理やAPIコールをここに追加
