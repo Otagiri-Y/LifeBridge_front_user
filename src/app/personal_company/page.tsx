@@ -1,18 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function PersonalCompany() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const userId = searchParams.get('userId');
-  
+  const [userId, setUserId] = useState<string | null>(null);
+
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    // URLからuserIdを取得
+    const searchParams = new URLSearchParams(window.location.search);
+    const userIdFromUrl = searchParams.get("userId");
+    setUserId(userIdFromUrl);
+  }, []);
 
   const handleNext = async () => {
     if (!userId) {
@@ -25,8 +31,8 @@ export default function PersonalCompany() {
 
     try {
       // 入力した会社名をセッションストレージに保存（一時的なデータ保存）
-      sessionStorage.setItem('lastCompany', companyName);
-      
+      sessionStorage.setItem("lastCompany", companyName);
+
       // 次の登録ステップに進む
       router.push(`/personal_occupation?userId=${userId}`);
     } catch (err) {
@@ -40,7 +46,7 @@ export default function PersonalCompany() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
-      
+
       <main className="flex-grow px-4 pt-6">
         <div className="mb-8">
           <button
