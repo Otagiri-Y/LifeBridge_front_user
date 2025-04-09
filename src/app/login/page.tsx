@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+//import Image from "next/image"; // 必要になったら有効化
+//import Link from "next/link"; // 必要になったら有効化
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -39,8 +41,9 @@ export default function Login() {
     // AuthContextのlogin関数を使用
     try {
       await login(email, password);
-    } catch (err) {
+    } catch {
       // エラーはAuthContextで処理されるのでここでは何もしない
+      // 変数名を省略することで未使用変数の警告を回避
     }
   };
 
@@ -53,12 +56,12 @@ export default function Login() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
-
+      
       <main className="flex-grow flex flex-col items-center justify-center px-4">
         <div className="w-full max-w-md">
           {/* タイトル部分 */}
           <div className="text-center mb-8">
-            <h1 className="text-xl font-bold mb-4">
+            <h1 className="text-2xl font-bold mb-4">
               あなたの理想の仕事がきっと見つかる
               <br />
               充実したセカンドキャリアを
@@ -68,14 +71,11 @@ export default function Login() {
           {/* ログインフォーム */}
           <form onSubmit={handleLogin} className="space-y-4 mb-6">
             {error && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert"
-              >
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                 <span className="block sm:inline">{error}</span>
               </div>
             )}
-
+            
             <div>
               <input
                 type="email"
@@ -86,7 +86,7 @@ export default function Login() {
                 required
               />
             </div>
-
+            
             <div>
               <input
                 type="password"
@@ -97,7 +97,7 @@ export default function Login() {
                 required
               />
             </div>
-
+            
             <button
               type="submit"
               className="w-full py-4 bg-blue-700 text-white font-bold rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
@@ -131,7 +131,7 @@ export default function Login() {
               </svg>
               Continue with Apple
             </button>
-
+            
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => handleSocialLogin("Facebook")}
@@ -147,7 +147,7 @@ export default function Login() {
                 </svg>
                 Facebook
               </button>
-
+              
               <button
                 onClick={() => handleSocialLogin("Google")}
                 className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 focus:outline-none"
@@ -180,7 +180,7 @@ export default function Login() {
           </div>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );
