@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withDb } from "@/lib/mysql";
-import { cookies } from "next/headers";
 import crypto from "crypto";
 import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
@@ -70,21 +69,13 @@ export async function POST(request: NextRequest) {
           [sessionToken, userId, expiresAt]
         );
 
-        // クッキーにセッショントークンを保存
-        cookies().set({
-          name: "session_token",
-          value: sessionToken,
-          httpOnly: true,
-          path: "/",
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 60 * 60 * 24 * 7,
-          sameSite: "strict", // オプションで追加できます
-        });
         return NextResponse.json(
           {
             message: "登録が完了しました",
             userId: userId,
+            sessionToken: sessionToken, // セッショントークンをレスポンスで返す
             redirectTo: "/home", // ログイン後のリダイレクト先
+            expiresAt: expiresAt.toISOString(), // トークンの有効期限も返す
           },
           { status: 200 }
         );
