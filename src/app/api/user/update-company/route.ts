@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { withDb } from "@/lib/mysql";
 import { RowDataPacket } from "mysql2/promise";
 
@@ -25,9 +24,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // セッションからユーザーIDを取得（認証済みユーザーを前提とする）
-    const cookieStore = cookies();
-    const sessionToken = cookieStore.get("session_token")?.value;
+    // リクエストヘッダーからセッショントークンを取得
+    const sessionToken = request.headers
+      .get("authorization")
+      ?.replace("Bearer ", "");
 
     if (!sessionToken) {
       return NextResponse.json({ message: "認証が必要です" }, { status: 401 });
