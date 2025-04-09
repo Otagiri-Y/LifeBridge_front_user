@@ -39,12 +39,26 @@ export async function GET() {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
 
+    if (!sessionToken) {
+      return NextResponse.json(
+        { authenticated: false },
+        { status: 401 }
+      );
+    }
+
     return await withDb(async (connection) => {
       // セッションを検索
       const [sessions] = await connection.execute<Session[]>(
         "SELECT * FROM sessions WHERE token = ? AND expires_at > NOW() LIMIT 1",
         [sessionToken]
       );
+
+      if (sessions.length === 0) {
+        return NextResponse.json(
+          { authenticated: false },
+          { status: 401 }
+        );
+      }
 
       const userId = sessions[0].user_id;
 
@@ -53,6 +67,13 @@ export async function GET() {
         "SELECT user_id, name, email, address, birth_date, last_company, job_type, job_type_detail FROM users WHERE user_id = ? LIMIT 1",
         [userId]
       );
+
+      if (users.length === 0) {
+        return NextResponse.json(
+          { authenticated: false },
+          { status: 401 }
+        );
+      }
 
       // パスワードなどの機密情報を除外したユーザー情報を返す
       const user = users[0];
