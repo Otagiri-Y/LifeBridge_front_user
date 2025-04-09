@@ -61,7 +61,7 @@ export default function Login() {
         <div className="w-full max-w-md">
           {/* タイトル部分 */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-xl font-bold mb-4">
               あなたの理想の仕事がきっと見つかる
               <br />
               充実したセカンドキャリアを
