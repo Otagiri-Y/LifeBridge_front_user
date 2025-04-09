@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { withDb } from "@/lib/mysql";
+import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
+
+// 型定義
+interface UserRegistrationData {
+  name: string;
+  address?: string;
+  birthdate?: string;
+  email: string;
+  password: string;
+}
+
+interface ExistingUser extends RowDataPacket {
+  id: number;
+  email: string;
+}
 
 // パスワードハッシュ化の設定
 const SALT_ROUNDS = 10;
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, address, birthdate, email, password } = await request.json();
+    const { name, address, birthdate, email, password }: UserRegistrationData = 
+      await request.json();
 
     // 基本的なバリデーション
     if (!name || !email || !password) {
@@ -37,15 +53,12 @@ export async function POST(request: NextRequest) {
     try {
       return await withDb(async (connection) => {
         // メールアドレスの重複チェック
-        const [existingUsers] = await connection.execute(
+        const [existingUsers] = await connection.execute<ExistingUser[]>(
           "SELECT * FROM users WHERE email = ? LIMIT 1",
           [email]
         );
 
-        if (
-          Array.isArray(existingUsers) &&
-          (existingUsers as any[]).length > 0
-        ) {
+        if (existingUsers.length > 0) {
           return NextResponse.json(
             { message: "このメールアドレスは既に登録されています" },
             { status: 409 }
@@ -61,13 +74,13 @@ export async function POST(request: NextRequest) {
           : null;
 
         // ユーザーの登録
-        const [result] = await connection.execute(
+        const [result] = await connection.execute<ResultSetHeader>(
           "INSERT INTO users (name, address, birth_date, email, password) VALUES (?, ?, ?, ?, ?)",
           [name, address || null, formattedBirthdate, email, hashedPassword]
         );
 
         // 挿入されたユーザーIDを取得
-        const userId = (result as any).insertId;
+        const userId = result.insertId;
 
         return NextResponse.json(
           {
@@ -77,17 +90,17 @@ export async function POST(request: NextRequest) {
           { status: 201 }
         );
       });
-    } catch (dbError: any) {
+    } catch (dbError: unknown) {
       console.error("Database error:", dbError);
       return NextResponse.json(
-        { message: `データベースエラーが発生しました: ${dbError.message}` },
+        { message: `データベースエラーが発生しました: ${dbError instanceof Error ? dbError.message : '不明なエラー'}` },
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Registration error:", error);
     return NextResponse.json(
-      { message: `サーバーエラーが発生しました: ${error.message}` },
+      { message: `サーバーエラーが発生しました: ${error instanceof Error ? error.message : '不明なエラー'}` },
       { status: 500 }
     );
   }

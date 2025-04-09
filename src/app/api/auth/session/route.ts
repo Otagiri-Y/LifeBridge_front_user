@@ -1,8 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { withDb } from "@/lib/mysql";
+import { RowDataPacket } from "mysql2/promise";
 
-export async function GET(request: NextRequest) {
+// セッションの型定義
+interface Session extends RowDataPacket {
+  token: string;
+  user_id: number;
+  expires_at: Date;
+}
+
+// ユーザーの型定義
+interface User extends RowDataPacket {
+  user_id: number;
+  name: string;
+  email: string;
+  address?: string | null;
+  birth_date?: string | null;
+  last_company?: string | null;
+  job_type?: string | null;
+  job_type_detail?: string | null;
+}
+
+// レスポンスユーザーの型定義
+interface ResponseUser {
+  id: number;
+  name: string;
+  email: string;
+  address?: string | null;
+  birthDate?: string | null;
+  lastCompany?: string | null;
+  jobType?: string | null;
+  jobTypeDetail?: string | null;
+}
+
+export async function GET(_request: NextRequest) {
   try {
     const cookieStore = cookies();
     const sessionToken = cookieStore.get("session_token")?.value;
@@ -16,29 +48,27 @@ export async function GET(request: NextRequest) {
 
     return await withDb(async (connection) => {
       // セッションを検索
-      const [sessions] = await connection.execute(
+      const [sessions] = await connection.execute<Session[]>(
         'SELECT * FROM sessions WHERE token = ? AND expires_at > NOW() LIMIT 1',
         [sessionToken]
       );
 
-      const sessionArray = sessions as any[];
-      if (sessionArray.length === 0) {
+      if (sessions.length === 0) {
         return NextResponse.json(
           { authenticated: false },
           { status: 401 }
         );
       }
 
-      const userId = sessionArray[0].user_id;
+      const userId = sessions[0].user_id;
 
       // ユーザー情報を取得
-      const [users] = await connection.execute(
+      const [users] = await connection.execute<User[]>(
         'SELECT user_id, name, email, address, birth_date, last_company, job_type, job_type_detail FROM users WHERE user_id = ? LIMIT 1',
         [userId]
       );
 
-      const userArray = users as any[];
-      if (userArray.length === 0) {
+      if (users.length === 0) {
         return NextResponse.json(
           { authenticated: false },
           { status: 401 }
@@ -46,31 +76,33 @@ export async function GET(request: NextRequest) {
       }
 
       // パスワードなどの機密情報を除外したユーザー情報を返す
-      const user = userArray[0];
+      const user = users[0];
+
+      const responseUser: ResponseUser = {
+        id: user.user_id,
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        birthDate: user.birth_date,
+        lastCompany: user.last_company,
+        jobType: user.job_type,
+        jobTypeDetail: user.job_type_detail
+      };
 
       return NextResponse.json(
         {
           authenticated: true,
-          user: {
-            id: user.user_id,
-            name: user.name,
-            email: user.email,
-            address: user.address,
-            birthDate: user.birth_date,
-            lastCompany: user.last_company,
-            jobType: user.job_type,
-            jobTypeDetail: user.job_type_detail
-          }
+          user: responseUser
         },
         { status: 200 }
       );
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Session check error:", error);
     return NextResponse.json(
       { 
         authenticated: false,
-        message: `セッション確認中にエラーが発生しました: ${error.message}` 
+        message: `セッション確認中にエラーが発生しました: ${error instanceof Error ? error.message : '不明なエラー'}` 
       },
       { status: 500 }
     );

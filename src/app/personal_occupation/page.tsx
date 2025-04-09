@@ -162,13 +162,10 @@ export default function PersonalOccupation() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 前のステップで保存した会社名を取得
-  const [lastCompany, setLastCompany] = useState("");
-  
   useEffect(() => {
-    // セッションストレージから会社名を取得
-    const company = sessionStorage.getItem('lastCompany') || "";
-    setLastCompany(company);
+    // セッションストレージから会社名を取得（未使用の警告を避けるためコメントアウト）
+    // const company = sessionStorage.getItem('lastCompany') || "";
+    // 必要に応じて後で使用する場合は、コメントを解除するか、適切に使用してください
   }, []);
 
   // 検索用にフィルタリングされた職種リスト

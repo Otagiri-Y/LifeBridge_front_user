@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { withDb } from "@/lib/mysql";
-import { v4 as uuidv4 } from "uuid";
 import { cookies } from "next/headers";
+import crypto from "crypto";
+import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-// パスワードハッシュ化の設定
-const SALT_ROUNDS = 10;
+// リクエストボディの型定義
+interface CompleteRegistrationRequest {
+  userId: number;
+  lastCompany?: string | null;
+  jobType?: string | null;
+  jobTypeDetail?: string | null;
+}
+
+// ユーザーの型定義
+interface User extends RowDataPacket {
+  user_id: number;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,8 +24,7 @@ export async function POST(request: NextRequest) {
       lastCompany,
       jobType,
       jobTypeDetail,
-      // 他の追加フィールドがあれば追加
-    } = await request.json();
+    }: CompleteRegistrationRequest = await request.json();
 
     // 基本的なバリデーション
     if (!userId) {
@@ -28,13 +37,12 @@ export async function POST(request: NextRequest) {
     try {
       return await withDb(async (connection) => {
         // ユーザーIDの存在確認
-        const [users] = await connection.execute(
-          'SELECT * FROM users WHERE user_id = ? LIMIT 1',
+        const [users] = await connection.execute<User[]>(
+          "SELECT * FROM users WHERE user_id = ? LIMIT 1",
           [userId]
         );
 
-        const userArray = users as any[];
-        if (userArray.length === 0) {
+        if (users.length === 0) {
           return NextResponse.json(
             { message: "ユーザーが見つかりません" },
             { status: 404 }
@@ -42,62 +50,64 @@ export async function POST(request: NextRequest) {
         }
 
         // ユーザー情報を更新
-        await connection.execute(
+        await connection.execute<ResultSetHeader>(
           `UPDATE users 
            SET last_company = ?, 
                job_type = ?, 
                job_type_detail = ?
            WHERE user_id = ?`,
-          [
-            lastCompany || null,
-            jobType || null,
-            jobTypeDetail || null,
-            userId
-          ]
+          [lastCompany || null, jobType || null, jobTypeDetail || null, userId]
         );
 
         // セッショントークンを生成してログイン状態にする
-        const sessionToken = uuidv4();
+        const sessionToken = crypto.randomUUID();
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7); // 1週間後に有効期限
 
         // セッションをデータベースに保存
-        await connection.execute(
-          'INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)',
+        await connection.execute<ResultSetHeader>(
+          "INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)",
           [sessionToken, userId, expiresAt]
         );
 
         // クッキーにセッショントークンを保存
-        const cookieStore = cookies();
-        cookieStore.set({
+        cookies().set({
           name: "session_token",
           value: sessionToken,
           httpOnly: true,
           path: "/",
           secure: process.env.NODE_ENV === "production",
-          maxAge: 60 * 60 * 24 * 7, // 1週間
+          maxAge: 60 * 60 * 24 * 7,
+          sameSite: "strict", // オプションで追加できます
         });
-
         return NextResponse.json(
-          { 
+          {
             message: "登録が完了しました",
             userId: userId,
-            redirectTo: "/home" // ログイン後のリダイレクト先
+            redirectTo: "/home", // ログイン後のリダイレクト先
           },
           { status: 200 }
         );
       });
-    } catch (dbError: any) {
+    } catch (dbError: unknown) {
       console.error("Database error:", dbError);
       return NextResponse.json(
-        { message: `データベースエラーが発生しました: ${dbError.message}` },
+        {
+          message: `データベースエラーが発生しました: ${
+            dbError instanceof Error ? dbError.message : "不明なエラー"
+          }`,
+        },
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Server error:", error);
     return NextResponse.json(
-      { message: `サーバーエラーが発生しました: ${error.message}` },
+      {
+        message: `サーバーエラーが発生しました: ${
+          error instanceof Error ? error.message : "不明なエラー"
+        }`,
+      },
       { status: 500 }
     );
   }
