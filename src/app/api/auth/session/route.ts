@@ -40,39 +40,30 @@ export async function GET(_request: NextRequest) {
     const sessionToken = cookieStore.get("session_token")?.value;
 
     if (!sessionToken) {
-      return NextResponse.json(
-        { authenticated: false },
-        { status: 401 }
-      );
+      return NextResponse.json({ authenticated: false }, { status: 401 });
     }
 
     return await withDb(async (connection) => {
       // セッションを検索
       const [sessions] = await connection.execute<Session[]>(
-        'SELECT * FROM sessions WHERE token = ? AND expires_at > NOW() LIMIT 1',
+        "SELECT * FROM sessions WHERE token = ? AND expires_at > NOW() LIMIT 1",
         [sessionToken]
       );
 
       if (sessions.length === 0) {
-        return NextResponse.json(
-          { authenticated: false },
-          { status: 401 }
-        );
+        return NextResponse.json({ authenticated: false }, { status: 401 });
       }
 
       const userId = sessions[0].user_id;
 
       // ユーザー情報を取得
       const [users] = await connection.execute<User[]>(
-        'SELECT user_id, name, email, address, birth_date, last_company, job_type, job_type_detail FROM users WHERE user_id = ? LIMIT 1',
+        "SELECT user_id, name, email, address, birth_date, last_company, job_type, job_type_detail FROM users WHERE user_id = ? LIMIT 1",
         [userId]
       );
 
       if (users.length === 0) {
-        return NextResponse.json(
-          { authenticated: false },
-          { status: 401 }
-        );
+        return NextResponse.json({ authenticated: false }, { status: 401 });
       }
 
       // パスワードなどの機密情報を除外したユーザー情報を返す
@@ -86,13 +77,13 @@ export async function GET(_request: NextRequest) {
         birthDate: user.birth_date,
         lastCompany: user.last_company,
         jobType: user.job_type,
-        jobTypeDetail: user.job_type_detail
+        jobTypeDetail: user.job_type_detail,
       };
 
       return NextResponse.json(
         {
           authenticated: true,
-          user: responseUser
+          user: responseUser,
         },
         { status: 200 }
       );
@@ -100,9 +91,11 @@ export async function GET(_request: NextRequest) {
   } catch (error: unknown) {
     console.error("Session check error:", error);
     return NextResponse.json(
-      { 
+      {
         authenticated: false,
-        message: `セッション確認中にエラーが発生しました: ${error instanceof Error ? error.message : '不明なエラー'}` 
+        message: `セッション確認中にエラーが発生しました: ${
+          error instanceof Error ? error.message : "不明なエラー"
+        }`,
       },
       { status: 500 }
     );
