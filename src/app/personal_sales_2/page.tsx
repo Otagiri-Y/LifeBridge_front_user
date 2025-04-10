@@ -44,7 +44,7 @@ export default function JobDetailSelection() {
         sessionStorage.setItem("selectedJobDetailName", selectedItem.name);
       }
       // 次のページへ遷移
-      router.push("/personal_workstyle");
+      router.push("/personal_workstyle_sales");
     }
   };
 

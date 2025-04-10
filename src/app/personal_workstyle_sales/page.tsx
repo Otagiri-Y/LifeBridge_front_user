@@ -171,7 +171,7 @@ export default function WorkEnvironmentSelection() {
         {/* 戻るボタン */}
         <div className="mb-4">
           <button
-            onClick={() => router.push("/personal_job_detail")}
+            onClick={() => router.push("/personal_sales_2")}
             className="flex items-center text-xl font-semibold"
           >
             <svg
