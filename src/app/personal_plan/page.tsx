@@ -1,52 +1,148 @@
 "use client";
 
-import React, { useState, } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// マーケティング関連の職種リスト
+// 企画/マーケティング/カスタマーサクセス関連の職種リスト
 const marketingOccupations = [
-  "経営/事業企画",
-  "営業推進/企画",
-  "商品企画",
-  "マーケティング戦略企画",
-  "マスマーケティング",
-  "Web/ECサイト運営",
-  "テクニカルマーケティング",
-  "ブランディング",
-  "カスタマーサクセス",
-  "カスタマーサポート/コールセンター",
-  "その他"
+  {
+    id: "business_planning",
+    name: "経営/事業企画",
+  },
+  {
+    id: "sales_planning",
+    name: "営業推進/企画",
+  },
+  {
+    id: "product_planning",
+    name: "商品企画",
+  },
+  {
+    id: "marketing_strategy",
+    name: "マーケティング戦略企画",
+  },
+  {
+    id: "mass_marketing",
+    name: "マスマーケティング",
+  },
+  {
+    id: "web_ec_management",
+    name: "Web/ECサイト運営",
+  },
+  {
+    id: "technical_marketing",
+    name: "テクニカルマーケティング",
+  },
+  {
+    id: "branding",
+    name: "ブランディング",
+  },
+  {
+    id: "customer_success",
+    name: "カスタマーサクセス",
+  },
+  {
+    id: "customer_support",
+    name: "カスタマーサポート/コールセンター",
+  },
+  {
+    id: "other",
+    name: "その他",
+  },
 ];
 
 export default function MarketingOccupation() {
   const router = useRouter();
-  const [selectedOccupation, setSelectedOccupation] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [selectedOccupation, setSelectedOccupation] = useState<string>("");
+  const [selectedOccupationName, setSelectedOccupationName] =
+    useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // URLからuserIdを取得
+    const searchParams = new URLSearchParams(window.location.search);
+    const userIdFromUrl = searchParams.get("userId");
+    setUserId(userIdFromUrl);
+  }, []);
 
   // 検索フィルター適用
-  const filteredOccupations = marketingOccupations.filter(occupation => 
-    occupation.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOccupations = marketingOccupations.filter((occupation) =>
+    occupation.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // 職種選択時の処理
-  const handleOccupationSelect = (occupation: string) => {
-    setSelectedOccupation(occupation);
+  const handleOccupationSelect = (
+    occupationId: string,
+    occupationName: string
+  ) => {
+    setSelectedOccupation(occupationId);
+    setSelectedOccupationName(occupationName);
+    // セッションストレージに保存
+    sessionStorage.setItem("jobTypeDetailId", occupationId);
+    sessionStorage.setItem("jobTypeDetailName", occupationName);
   };
 
   // リセットボタンの処理
   const handleReset = () => {
-    setSelectedOccupation(null);
+    setSelectedOccupation("");
+    setSelectedOccupationName("");
+    sessionStorage.removeItem("jobTypeDetailId");
+    sessionStorage.removeItem("jobTypeDetailName");
   };
 
   // 次へボタンの処理
-  const handleNext = () => {
-    if (selectedOccupation) {
-      // 選択した職種をセッションストレージに保存
-      sessionStorage.setItem("selectedOccupation", selectedOccupation);
-      // 次のページへ遷移
-      router.push("/personal_plan_2");
+  const handleNext = async () => {
+    if (!userId) {
+      setError("ユーザーIDが見つかりません。登録をやり直してください。");
+      return;
+    }
+
+    if (!selectedOccupation) {
+      setError("職種詳細を選択してください");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      // APIを呼び出して職種詳細情報をデータベースに保存
+      const response = await fetch("/api/user/update-job-type-detail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          jobTypeDetail: selectedOccupationName, // 選択した職種詳細名をデータベースに保存
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "職種詳細情報の保存に失敗しました");
+      }
+
+      // 選択した詳細によって次画面を分岐
+      if (selectedOccupation === "business_planning") {
+        // 全てのケースでpersonal_plan_2に遷移
+        router.push(`/personal_plan_2?userId=${userId}`);
+      }
+    } catch (err) {
+      console.error("Error saving job type detail:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "エラーが発生しました。もう一度お試しください。"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,7 +153,7 @@ export default function MarketingOccupation() {
       <main className="flex-grow px-4 pt-6 pb-20">
         <div className="mb-4">
           <button
-            onClick={() => router.push("/personal_occupation")}
+            onClick={() => router.push(`/personal_occupation?userId=${userId}`)}
             className="flex items-center text-xl font-semibold"
           >
             <svg
@@ -75,6 +171,33 @@ export default function MarketingOccupation() {
               />
             </svg>
             直近の経歴の職種
+          </button>
+        </div>
+
+        {/* パンくずリスト */}
+        <div className="flex items-center text-sm mb-4 overflow-x-auto whitespace-nowrap">
+          <button
+            className="text-gray-500"
+            onClick={() => router.push(`/personal_occupation?userId=${userId}`)}
+          >
+            全て
+          </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 mx-1 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+          <button className="text-blue-600 font-medium">
+            企画/マーケティング/カスタマーサクセス
           </button>
         </div>
 
@@ -108,29 +231,25 @@ export default function MarketingOccupation() {
           </div>
         </div>
 
-        {/* カテゴリフィルター */}
-        <div className="flex mb-4 space-x-2 overflow-x-auto pb-2">
-          <button className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full whitespace-nowrap">
-            全て
-          </button>
-          <button className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full whitespace-nowrap">
-            企画/マーケティング/カスタマーサクセス
-          </button>
-        </div>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
 
-        {/* 職種リスト */}
+        {/* 職種詳細リスト */}
         <div className="space-y-0 mb-24">
-          {filteredOccupations.map((occupation, index) => (
+          {filteredOccupations.map((occupation) => (
             <div
-              key={index}
+              key={occupation.id}
               className={`border-b border-gray-200 py-3 px-2 flex justify-between items-center cursor-pointer ${
-                selectedOccupation === occupation ? "bg-blue-50" : ""
+                selectedOccupation === occupation.id ? "bg-blue-50" : ""
               }`}
-              onClick={() => handleOccupationSelect(occupation)}
+              onClick={() =>
+                handleOccupationSelect(occupation.id, occupation.name)
+              }
             >
-              <div>
-                <div className="font-medium">{occupation}</div>
-              </div>
+              <div className="font-medium">{occupation.name}</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-gray-400"
@@ -157,12 +276,12 @@ export default function MarketingOccupation() {
           </button>
           <button
             onClick={handleNext}
-            disabled={!selectedOccupation}
+            disabled={loading || !selectedOccupation}
             className={`px-8 py-3 rounded-full text-white ${
               selectedOccupation ? "bg-blue-700" : "bg-gray-400"
             }`}
           >
-            次へ進む
+            {loading ? "処理中..." : "次へ進む"}
           </button>
         </div>
       </main>
