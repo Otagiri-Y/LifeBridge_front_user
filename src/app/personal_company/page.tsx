@@ -26,18 +26,48 @@ export default function PersonalCompany() {
       return;
     }
 
+    if (!companyName.trim()) {
+      setError("会社名を入力してください。");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
-      // 入力した会社名をセッションストレージに保存（一時的なデータ保存）
+      // APIを呼び出して会社名をデータベースに保存
+      const response = await fetch(
+        "/api/user/update-company-during-registration",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            lastCompany: companyName,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "会社名の保存に失敗しました");
+      }
+
+      // バックアップとしてセッションストレージにも保存
       sessionStorage.setItem("lastCompany", companyName);
 
       // 次の登録ステップに進む
       router.push(`/personal_occupation?userId=${userId}`);
     } catch (err) {
       console.error("Error saving company:", err);
-      setError("エラーが発生しました。もう一度お試しください。");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "エラーが発生しました。もう一度お試しください。"
+      );
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { useRouter } from "next/navigation";
 
 // ユーザー型の定義
 type User = {
+  id: number;
   email: string;
   // 必要に応じて他のユーザー情報を追加
 };
@@ -68,12 +75,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       // ユーザー情報を設定
-      const loggedInUser = { email: data.user.email };
+      const loggedInUser = { id: data.user.id, email: data.user.email };
       setUser(loggedInUser);
-      
+
       // ローカルストレージに保存
       localStorage.setItem("user", JSON.stringify(loggedInUser));
-      
+
       // ホームページへリダイレクト
       router.push("/home");
     } catch (err) {

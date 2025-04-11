@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import { withDb } from "@/lib/mysql";
+import { RowDataPacket } from "mysql2/promise";
 
-// 実際のアプリでは、データベースからのユーザー認証ロジックがここに入ります
-// この例ではモックデータを使用しています
-const mockUsers = [
-  { email: "test@example.com", password: "password123" },
-  { email: "user@example.com", password: "securepass" },
-];
+// ユーザー型定義
+interface User extends RowDataPacket {
+  user_id: number;
+  email: string;
+  password: string;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,33 +22,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ユーザー認証
-    // 実際のアプリではデータベースからユーザーを検索します
-    const user = mockUsers.find(
-      (u) => u.email === email && u.password === password
-    );
+    try {
+      // データベースからユーザーを検索
+      return await withDb(async (connection) => {
+        const [users] = await connection.execute<User[]>(
+          "SELECT * FROM users WHERE email = ? LIMIT 1",
+          [email]
+        );
 
-    if (!user) {
+        // ユーザーが見つからない場合
+        if (users.length === 0) {
+          return NextResponse.json(
+            { message: "メールアドレスまたはパスワードが正しくありません" },
+            { status: 401 }
+          );
+        }
+
+        const user = users[0];
+
+        // パスワードの検証
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+          return NextResponse.json(
+            { message: "メールアドレスまたはパスワードが正しくありません" },
+            { status: 401 }
+          );
+        }
+
+        // 認証成功
+        // sessionsテーブルがないためセッションの保存をスキップ
+        
+        return NextResponse.json(
+          {
+            message: "ログイン成功",
+            user: { 
+              id: user.user_id,
+              email: user.email 
+            }
+          },
+          { status: 200 }
+        );
+      });
+    } catch (dbError: unknown) {
+      console.error("Database error:", dbError);
       return NextResponse.json(
-        { message: "メールアドレスまたはパスワードが正しくありません" },
-        { status: 401 }
+        { 
+          message: `データベースエラーが発生しました: ${
+            dbError instanceof Error ? dbError.message : "不明なエラー"
+          }` 
+        },
+        { status: 500 }
       );
     }
-
-    // 認証成功
-    // 実際のアプリではセッションまたはJWTトークンを発行します
-    return NextResponse.json(
-      {
-        message: "ログイン成功",
-        user: { email: user.email },
-        // token: "jwt_token_would_go_here"
-      },
-      { status: 200 }
-    );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { message: "サーバーエラーが発生しました" },
+      { 
+        message: `サーバーエラーが発生しました: ${
+          error instanceof Error ? error.message : "不明なエラー"
+        }` 
+      },
       { status: 500 }
     );
   }
