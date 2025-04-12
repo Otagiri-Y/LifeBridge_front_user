@@ -26,8 +26,8 @@ export default function MainContent() {
             <Image
               src="/top_image.svg"
               alt="セカンドキャリアイメージ"
-              width={80}
-              height={80}
+              width={150}
+              height={200}
               className="w-full h-full"
             />
           </div>

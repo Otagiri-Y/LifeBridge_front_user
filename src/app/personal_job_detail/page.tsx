@@ -1,9 +1,8 @@
-// pages/index.tsx または app/page.tsx
 import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
-import MessageScreen from "@/components/MessageScreen";
+import UndevelopedScreen from "@/components/UndevelopedScreen";
 
 export default function Home() {
   // 必要に応じて状態管理やAPIコールをここに追加
@@ -26,8 +25,8 @@ export default function Home() {
         {/* 検索バーコンポーネント */}
         <SearchBar lastUpdated={lastUpdated} searchHistory={searchHistory} />
 
-        {/* メッセージ画面コンポーネント */}
-        <MessageScreen hasMessages={hasMessages} />
+        {/* お詫びコンポーネント（画像が内部に含まれている） */}
+        <UndevelopedScreen hasMessages={hasMessages} />
       </main>
 
       <Footer />
