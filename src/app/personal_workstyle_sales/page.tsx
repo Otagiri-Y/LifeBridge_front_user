@@ -91,6 +91,7 @@ export default function WorkEnvironmentSelection() {
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     // URLからuserIdを取得
@@ -131,10 +132,11 @@ export default function WorkEnvironmentSelection() {
       contribute: [],
       personalValues: [],
     });
+    setSuccessMessage("");
   };
 
-  // 次へボタンの処理
-  const handleNext = async () => {
+  // 登録ボタンの処理
+  const handleRegister = async () => {
     if (!userId) {
       setError("ユーザーIDが見つかりません。登録をやり直してください。");
       return;
@@ -152,6 +154,7 @@ export default function WorkEnvironmentSelection() {
 
     setLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
       // user_preferences テーブルへのデータ保存
@@ -199,8 +202,10 @@ export default function WorkEnvironmentSelection() {
         );
       }
 
-      // 保存が完了したらホームページへ遷移
-      router.push("/home");
+      // 保存が完了したらメッセージを表示するだけ（ページ遷移なし）
+      setSuccessMessage(
+        "条件が登録されました。検索するには「登録した内容で検索する」ボタンを押してください。"
+      );
     } catch (err) {
       console.error("Error saving preferences:", err);
       setError(
@@ -317,9 +322,17 @@ export default function WorkEnvironmentSelection() {
           </div>
         </div>
 
+        {/* エラーメッセージ */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
+          </div>
+        )}
+
+        {/* 成功メッセージ */}
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {successMessage}
           </div>
         )}
 
@@ -388,7 +401,7 @@ export default function WorkEnvironmentSelection() {
 
         {/* ボタンエリア - 画面下部に固定 */}
         <div className="fixed bottom-16 left-0 right-0 px-4 py-3 space-y-4 bg-white border-t">
-          {/* 上段：リセットと次へ進むボタン */}
+          {/* 上段：リセットと登録するボタン */}
           <div className="flex justify-between">
             <button
               onClick={handleReset}
@@ -397,7 +410,7 @@ export default function WorkEnvironmentSelection() {
               リセット
             </button>
             <button
-              onClick={handleNext}
+              onClick={handleRegister}
               disabled={loading || totalSelectionsCount === 0}
               className={`w-40 py-3 rounded-full text-white transition-colors ${
                 totalSelectionsCount > 0
@@ -408,7 +421,7 @@ export default function WorkEnvironmentSelection() {
               {loading ? "保存中..." : "登録する"}
             </button>
           </div>
-          
+
           {/* 下段：登録した内容で検索するボタン */}
           <button
             onClick={handleSearch}
