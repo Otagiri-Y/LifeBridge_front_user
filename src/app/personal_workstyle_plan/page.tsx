@@ -72,10 +72,10 @@ const categoryTitles: Record<string, string> = {
   personalValues: "大事にする価値観",
 };
 
-export default function WorkEnvironmentSelectionPlan() {
+export default function WorkEnvironmentSelection() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  
+
   // カテゴリごとに選択された項目を管理
   const [selections, setSelections] = useState<Record<string, string[]>>({
     atmosphere: [],
@@ -89,6 +89,7 @@ export default function WorkEnvironmentSelectionPlan() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -103,17 +104,17 @@ export default function WorkEnvironmentSelectionPlan() {
     setSelections((prev) => {
       // 現在のカテゴリの選択状態を取得
       const currentSelections = [...prev[category]];
-      
+
       // すでに選択されていれば解除、なければ追加
       if (currentSelections.includes(optionId)) {
         return {
           ...prev,
-          [category]: currentSelections.filter(id => id !== optionId)
+          [category]: currentSelections.filter((id) => id !== optionId),
         };
       } else {
         return {
           ...prev,
-          [category]: [...currentSelections, optionId]
+          [category]: [...currentSelections, optionId],
         };
       }
     });
@@ -141,7 +142,7 @@ export default function WorkEnvironmentSelectionPlan() {
 
     // 少なくとも1つのオプションが選択されているか確認
     const hasSelections = Object.values(selections).some(
-      categorySelections => categorySelections.length > 0
+      (categorySelections) => categorySelections.length > 0
     );
 
     if (!hasSelections) {
@@ -170,7 +171,9 @@ export default function WorkEnvironmentSelectionPlan() {
       const preferencesData = await preferencesResponse.json();
 
       if (!preferencesResponse.ok) {
-        throw new Error(preferencesData.message || "環境条件の保存に失敗しました");
+        throw new Error(
+          preferencesData.message || "環境条件の保存に失敗しました"
+        );
       }
 
       // user_orientation テーブルへのデータ保存
@@ -191,7 +194,9 @@ export default function WorkEnvironmentSelectionPlan() {
       const orientationData = await orientationResponse.json();
 
       if (!orientationResponse.ok) {
-        throw new Error(orientationData.message || "指向性の保存に失敗しました");
+        throw new Error(
+          orientationData.message || "指向性の保存に失敗しました"
+        );
       }
 
       // 保存が完了したらホームページへ遷移
@@ -208,22 +213,56 @@ export default function WorkEnvironmentSelectionPlan() {
     }
   };
 
+  // 登録した内容で検索する処理
+  const handleSearch = async () => {
+    // 少なくとも1つのオプションが選択されているか確認
+    const hasSelections = Object.values(selections).some(
+      (categorySelections) => categorySelections.length > 0
+    );
+
+    if (!hasSelections) {
+      setError("少なくとも1つの項目を選択してください");
+      return;
+    }
+
+    setSearchLoading(true);
+    setError("");
+
+    try {
+      // 検索条件をローカルストレージに保存（実際の実装ではAPIにリクエスト）
+      localStorage.setItem("searchPreferences", JSON.stringify(selections));
+
+      // TOPページに遷移
+      router.push("/home");
+    } catch (err) {
+      console.error("Error searching with preferences:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "検索処理中にエラーが発生しました。もう一度お試しください。"
+      );
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
   // 選択されているオプションの総数を計算
   const totalSelectionsCount = Object.values(selections).reduce(
-    (total, categorySelections) => total + categorySelections.length, 0
+    (total, categorySelections) => total + categorySelections.length,
+    0
   );
 
   // テキストの長さに基づいて列数を決定する関数
   const getColSpan = (text: string) => {
-    if (text.length <= 8) return "";  // 短いテキスト: 2列グリッド内で1つ分のスペース
-    return "col-span-2";              // 長いテキスト: 2列グリッド内で2つ分のスペース
+    if (text.length <= 8) return ""; // 短いテキスト: 2列グリッド内で1つ分のスペース
+    return "col-span-2"; // 長いテキスト: 2列グリッド内で2つ分のスペース
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow px-4 pt-6 pb-20">
+      <main className="flex-grow px-4 pt-6 pb-48">
         {/* 戻るボタン */}
         <div className="mb-4">
           <button
@@ -284,49 +323,27 @@ export default function WorkEnvironmentSelectionPlan() {
           </div>
         )}
 
-        {/* パンくずリスト */}
-        <div className="flex items-center text-sm mb-4 overflow-x-auto whitespace-nowrap">
-          <button className="text-gray-500" onClick={() => router.push(`/personal_occupation?userId=${userId}`)}>全て</button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mx-1 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-          <button className="text-gray-500" onClick={() => router.push(`/personal_plan?userId=${userId}`)}>
-            企画/マーケティング/カスタマーサクセス
-          </button>
-        </div>
-
         {/* カテゴリごとの選択肢 */}
         <div className="mb-20 space-y-6">
           {/* 各カテゴリを順に表示 */}
           {Object.entries(environmentOptions).map(([category, options]) => {
             // 検索フィルターの適用
             const filteredOptions = searchTerm
-              ? options.filter(option => 
+              ? options.filter((option) =>
                   option.name.toLowerCase().includes(searchTerm.toLowerCase())
                 )
               : options;
-              
+
             // 表示するオプションがない場合はカテゴリごと非表示
             if (filteredOptions.length === 0) return null;
-            
+
             return (
               <div key={category} className="space-y-2">
                 {/* カテゴリタイトル */}
                 <h3 className="font-medium text-gray-800">
                   {categoryTitles[category]}
                 </h3>
-                
+
                 {/* オプションの表示（2列グリッド） */}
                 <div className="grid grid-cols-2 gap-3">
                   {filteredOptions.map((option) => {
@@ -335,7 +352,9 @@ export default function WorkEnvironmentSelectionPlan() {
                       <div
                         key={option.id}
                         className={`flex items-center border rounded-md p-3 h-14 ${
-                          selections[category].includes(option.id) ? "bg-blue-50" : "bg-gray-50"
+                          selections[category].includes(option.id)
+                            ? "bg-blue-50"
+                            : "bg-gray-50"
                         } ${colSpan}`}
                         onClick={() => handleSelect(category, option.id)}
                       >
@@ -367,24 +386,40 @@ export default function WorkEnvironmentSelectionPlan() {
           })}
         </div>
 
-        {/* 固定ボタンエリア */}
-        <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
+        {/* ボタンエリア - 画面下部に固定 */}
+        <div className="fixed bottom-16 left-0 right-0 px-4 py-3 space-y-4 bg-white border-t">
+          {/* 上段：リセットと次へ進むボタン */}
+          <div className="flex justify-between">
+            <button
+              onClick={handleReset}
+              className="w-40 py-3 border border-gray-300 rounded-full text-gray-700 bg-white hover:bg-gray-100 transition-colors"
+            >
+              リセット
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={loading || totalSelectionsCount === 0}
+              className={`w-40 py-3 rounded-full text-white transition-colors ${
+                totalSelectionsCount > 0
+                  ? "bg-blue-700 hover:bg-blue-800"
+                  : "bg-gray-400"
+              }`}
+            >
+              {loading ? "保存中..." : "登録する"}
+            </button>
+          </div>
+          
+          {/* 下段：登録した内容で検索するボタン */}
           <button
-            onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700 active:bg-gray-200 transition-colors"
-          >
-            リセット
-          </button>
-          <button
-            onClick={handleNext}
-            disabled={loading || totalSelectionsCount === 0}
-            className={`px-8 py-3 rounded-full text-white transition-colors ${
+            onClick={handleSearch}
+            disabled={searchLoading || totalSelectionsCount === 0}
+            className={`w-full py-3 rounded-full text-white font-medium transition-colors ${
               totalSelectionsCount > 0
-                ? "bg-blue-700 active:bg-blue-800"
+                ? "bg-red-600 hover:bg-red-700"
                 : "bg-gray-400"
             }`}
           >
-            {loading ? "保存中..." : "登録"}
+            {searchLoading ? "検索中..." : "登録した内容で検索する"}
           </button>
         </div>
       </main>

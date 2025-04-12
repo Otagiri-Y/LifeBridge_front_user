@@ -89,6 +89,7 @@ export default function WorkEnvironmentSelection() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -212,6 +213,39 @@ export default function WorkEnvironmentSelection() {
     }
   };
 
+  // 登録した内容で検索する処理
+  const handleSearch = async () => {
+    // 少なくとも1つのオプションが選択されているか確認
+    const hasSelections = Object.values(selections).some(
+      (categorySelections) => categorySelections.length > 0
+    );
+
+    if (!hasSelections) {
+      setError("少なくとも1つの項目を選択してください");
+      return;
+    }
+
+    setSearchLoading(true);
+    setError("");
+
+    try {
+      // 検索条件をローカルストレージに保存（実際の実装ではAPIにリクエスト）
+      localStorage.setItem("searchPreferences", JSON.stringify(selections));
+
+      // TOPページに遷移
+      router.push("/home");
+    } catch (err) {
+      console.error("Error searching with preferences:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "検索処理中にエラーが発生しました。もう一度お試しください。"
+      );
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
   // 選択されているオプションの総数を計算
   const totalSelectionsCount = Object.values(selections).reduce(
     (total, categorySelections) => total + categorySelections.length,
@@ -228,7 +262,7 @@ export default function WorkEnvironmentSelection() {
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow px-4 pt-6 pb-20">
+      <main className="flex-grow px-4 pt-6 pb-48">
         {/* 戻るボタン */}
         <div className="mb-4">
           <button
@@ -352,24 +386,40 @@ export default function WorkEnvironmentSelection() {
           })}
         </div>
 
-        {/* 固定ボタンエリア */}
-        <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
+        {/* ボタンエリア - 画面下部に固定 */}
+        <div className="fixed bottom-16 left-0 right-0 px-4 py-3 space-y-4 bg-white border-t">
+          {/* 上段：リセットと次へ進むボタン */}
+          <div className="flex justify-between">
+            <button
+              onClick={handleReset}
+              className="w-40 py-3 border border-gray-300 rounded-full text-gray-700 bg-white hover:bg-gray-100 transition-colors"
+            >
+              リセット
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={loading || totalSelectionsCount === 0}
+              className={`w-40 py-3 rounded-full text-white transition-colors ${
+                totalSelectionsCount > 0
+                  ? "bg-blue-700 hover:bg-blue-800"
+                  : "bg-gray-400"
+              }`}
+            >
+              {loading ? "保存中..." : "登録する"}
+            </button>
+          </div>
+          
+          {/* 下段：登録した内容で検索するボタン */}
           <button
-            onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700 active:bg-gray-200 transition-colors"
-          >
-            リセット
-          </button>
-          <button
-            onClick={handleNext}
-            disabled={loading || totalSelectionsCount === 0}
-            className={`px-8 py-3 rounded-full text-white transition-colors ${
+            onClick={handleSearch}
+            disabled={searchLoading || totalSelectionsCount === 0}
+            className={`w-full py-3 rounded-full text-white font-medium transition-colors ${
               totalSelectionsCount > 0
-                ? "bg-blue-700 active:bg-blue-800"
+                ? "bg-red-600 hover:bg-red-700"
                 : "bg-gray-400"
             }`}
           >
-            {loading ? "保存中..." : "登録"}
+            {searchLoading ? "検索中..." : "登録した内容で検索する"}
           </button>
         </div>
       </main>
