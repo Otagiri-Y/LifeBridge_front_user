@@ -288,7 +288,7 @@ export default function WorkEnvironmentSelection() {
                 d="M15.75 19.5L8.25 12l7.5-7.5"
               />
             </svg>
-            求める環境条件
+            求める環境・価値観
           </button>
         </div>
 
