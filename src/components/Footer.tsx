@@ -46,7 +46,7 @@ export default function Footer() {
             <span>求人検索</span>
           </Link>
           <Link
-            href="/offer"
+            href="/offer_user"
             className="flex flex-col items-center text-gray-500 text-xs"
           >
             <svg
