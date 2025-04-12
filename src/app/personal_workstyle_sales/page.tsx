@@ -369,7 +369,7 @@ export default function WorkEnvironmentSelection() {
                 : "bg-gray-400"
             }`}
           >
-            {loading ? "保存中..." : "次へ進む"}
+            {loading ? "保存中..." : "登録"}
           </button>
         </div>
       </main>
