@@ -15,6 +15,7 @@ export async function checkConnection(): Promise<string> {
     const data = await res.json();
     return data.message || "Unknown response";
   } catch (error) {
+    console.error("接続エラー:", error);
     return "接続エラー";
   }
 }
