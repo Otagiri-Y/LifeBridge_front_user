@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import FilterModal from "./FilterModal";
 
@@ -213,13 +214,17 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
         </button>
       </div>
 
-      {/* 検索ボタン */}
-      <button
-        className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg w-full mt-8"
-        onClick={onSearch}
+      {/* 検索ボタン - buttonからLinkに変更 */}
+      <Link
+        href="/personal_job_detail"
+        className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg w-full mt-8 block text-center"
+        onClick={() => {
+          // 元の検索処理も実行
+          onSearch();
+        }}
       >
         検索
-      </button>
+      </Link>
 
       {/* リセットボタン */}
       <button

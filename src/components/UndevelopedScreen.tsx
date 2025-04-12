@@ -18,7 +18,7 @@ const UndevelopedScreen: React.FC<UndevelopedScreenProps> = ({
   if (!hasMessages) {
     return (
       <div className="flex flex-col items-center text-center p-6">
-        <h2 className="text-xl font-bold mb-4">リソースの関係で未開発です</h2>
+        <h2 className="text-xl font-bold mb-4">鋭意開発中です</h2>
         <p className="text-gray-500 mb-8">
           大変申し訳ありませんが、
           <br />

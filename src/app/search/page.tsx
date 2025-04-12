@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import SearchFilter from "@/components/SearchFilter";
 
 export default function Search() {
-  // 必要に応じて状態管理やAPIコールをここに追加
+  const router = useRouter();
+
   // 最新の更新日時（実際の実装ではAPIから取得するか、サーバーサイドで生成）
   const lastUpdated = "2025/4/24 17:00 更新";
 
@@ -17,7 +19,8 @@ export default function Search() {
   // 検索ボタンがクリックされた時の処理
   const handleSearch = () => {
     console.log("検索実行");
-    // ここに検索処理を実装
+    // personal_job_detailページに遷移
+    router.push("/personal_job_detail");
   };
 
   // リセットボタンがクリックされた時の処理
@@ -39,10 +42,7 @@ export default function Search() {
           <h1 className="text-2xl font-bold mb-4 text-center">求人を探す</h1>
           <hr className="mb-4" />
 
-          <SearchFilter 
-            onSearch={handleSearch}
-            onReset={handleReset}
-          />
+          <SearchFilter onSearch={handleSearch} onReset={handleReset} />
         </div>
       </main>
 
