@@ -1,33 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function PersonalCompany() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
 
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    // URLからuserIdを取得
-    const searchParams = new URLSearchParams(window.location.search);
-    const userIdFromUrl = searchParams.get("userId");
-    setUserId(userIdFromUrl);
-  }, []);
-
   const handleNext = async () => {
-    if (!userId) {
-      setError("ユーザーIDが見つかりません。登録をやり直してください。");
+    if (!companyName.trim()) {
+      setError("会社名を入力してください。");
       return;
     }
 
-    if (!companyName.trim()) {
-      setError("会社名を入力してください。");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("認証情報が見つかりません。ログインし直してください。");
       return;
     }
 
@@ -35,38 +30,27 @@ export default function PersonalCompany() {
     setError("");
 
     try {
-      // APIを呼び出して会社名をデータベースに保存
-      const response = await fetch(
-        "/api/user/update-company-during-registration",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId,
-            lastCompany: companyName,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:8000/api/user/company", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ company_name: companyName }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "会社名の保存に失敗しました");
+        throw new Error(data.detail || "会社名の保存に失敗しました");
       }
 
-      // バックアップとしてセッションストレージにも保存
       sessionStorage.setItem("lastCompany", companyName);
-
-      // 次の登録ステップに進む
-      router.push(`/personal_occupation?userId=${userId}`);
+      router.push(`/personal_occupation`);
     } catch (err) {
       console.error("Error saving company:", err);
       setError(
-        err instanceof Error
-          ? err.message
-          : "エラーが発生しました。もう一度お試しください。"
+        err instanceof Error ? err.message : "エラーが発生しました。もう一度お試しください。"
       );
     } finally {
       setLoading(false);
