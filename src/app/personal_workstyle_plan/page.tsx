@@ -144,8 +144,9 @@ export default function WorkEnvironmentSelection() {
         throw new Error(data.detail || "検索に失敗しました");
       }
 
-      const matchedJob = await res.json();
-      localStorage.setItem("matchedJob", JSON.stringify(matchedJob));
+      const matchedJobs = await res.json();
+      const jobArray = Array.isArray(matchedJobs) ? matchedJobs : [matchedJobs];
+      localStorage.setItem("matchedJob", JSON.stringify(jobArray));
       router.push("/home");
     } catch (err) {
       setError(err instanceof Error ? err.message : "検索中にエラーが発生しました");
