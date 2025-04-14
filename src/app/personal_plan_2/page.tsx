@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const jobDetailOptions = [
   [
     { id: "management_planning", name: "経営企画" },
@@ -43,7 +45,7 @@ export default function JobDetailMultipleSelection() {
       return;
     }
 
-    fetch("http://localhost:8000/api/auth/check", {
+    fetch(`${API_BASE_URL}/api/auth/check`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

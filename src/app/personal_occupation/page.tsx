@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const jobCategories = [
   { id: "sales", name: "営業", detail: "建設/土木/プラント営業・不動産営業・IT・・・" },
   { id: "marketing", name: "企画/マーケティング/カスタマーサクセス/・・・", detail: "企画・宣伝販売・マーケティング・コンサルタント" },
@@ -61,7 +63,7 @@ export default function PersonalOccupation() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/job_type", {
+      const response = await fetch(`${API_BASE_URL}/api/user/job_type`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

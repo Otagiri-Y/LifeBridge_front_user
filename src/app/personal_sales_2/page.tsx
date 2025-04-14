@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const jobDetails = [
   {
     id: "corporate_sales",
@@ -31,7 +33,7 @@ export default function JobDetailSelection() {
       return;
     }
 
-    fetch("http://localhost:8000/api/auth/check", {
+    fetch(`${API_BASE_URL}/api/auth/check`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

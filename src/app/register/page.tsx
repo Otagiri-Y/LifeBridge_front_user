@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Register() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -38,7 +40,7 @@ export default function Register() {
         throw new Error("パスワードは6文字以上で入力してください");
       }
 
-      const response = await fetch("http://localhost:8000/api/signup", {
+      const response = await fetch(`${API_BASE_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

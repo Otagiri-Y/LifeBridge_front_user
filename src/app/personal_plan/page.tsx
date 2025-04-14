@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const marketingOccupations = [
   { id: "business_planning", name: "経営/事業企画" },
   { id: "sales_planning", name: "営業推進/企画" },
@@ -68,7 +70,7 @@ export default function MarketingOccupation() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/job_type_detail", {
+      const response = await fetch(`${API_BASE_URL}/api/user/job_type_detail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

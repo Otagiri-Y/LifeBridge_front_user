@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const environmentOptions = {
   atmosphere: [
     { id: "bright", name: "明るい" },
@@ -98,7 +100,7 @@ export default function WorkEnvironmentSelection() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("http://localhost:8000/api/user/matching", {
+      const response = await fetch(`${API_BASE_URL}/api/user/matching`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +135,7 @@ export default function WorkEnvironmentSelection() {
     if (!token) return setError("トークンが見つかりません");
 
     try {
-      const res = await fetch("http://localhost:8000/api/user/search", {
+      const res = await fetch(`${API_BASE_URL}/api/user/search`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ export default function Login() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:8000/api/me", {
+        const res = await fetch(`${API_BASE_URL}/api/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

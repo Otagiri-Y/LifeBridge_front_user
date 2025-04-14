@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // 営業職の詳細リスト
 const salesJobDetails = [
   { id: "machinery_electric", name: "機械/電気電子製品営業" },
@@ -76,7 +78,7 @@ export default function SalesDetail() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/job_type_detail", {
+      const response = await fetch(`${API_BASE_URL}/api/user/job_type_detail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

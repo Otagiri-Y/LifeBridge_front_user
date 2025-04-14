@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function PersonalCompany() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,7 +32,7 @@ export default function PersonalCompany() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/company", {
+      const response = await fetch(`${API_BASE_URL}/api/user/company`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
