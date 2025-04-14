@@ -1,7 +1,7 @@
 // src/lib/api.ts
 
 // バックエンドのURL（ローカル or デプロイ環境）
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * FastAPI の /test に接続し、接続状態を取得
