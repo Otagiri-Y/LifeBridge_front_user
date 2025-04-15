@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 export default function PersonalCompany() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const userId = searchParams.get("userId");
+  const _userId = searchParams.get("userId");
 
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,9 @@ export default function PersonalCompany() {
     } catch (err) {
       console.error("Error saving company:", err);
       setError(
-        err instanceof Error ? err.message : "エラーが発生しました。もう一度お試しください。"
+        err instanceof Error
+          ? err.message
+          : "エラーが発生しました。もう一度お試しください。"
       );
     } finally {
       setLoading(false);
