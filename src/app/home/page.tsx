@@ -9,6 +9,18 @@ import Link from "next/link";
 // APIのベースURLを環境変数または定数として定義
 const API_BASE_URL = "http://localhost:8000";
 
+// 仕事概要に表示する可能性のあるタグのリスト
+const JOB_SUMMARY_TAGS = [
+  "業界未経験歓迎",
+  "完全週休2日制",
+  "年間休日120日以上",
+  "学歴不問",
+  "副業・WワークOK",
+  "社会保険完備",
+  "車・バイク通勤可",
+  "インセンティブあり",
+];
+
 // JobCardに表示するデータの型定義
 interface JobData {
   job_id: number;
@@ -31,8 +43,25 @@ interface JobData {
   expected_role?: string;
 }
 
+// 配列からランダムに指定した数の要素を選択する関数
+const getRandomItems = (array: string[], count: number): string[] => {
+  // 配列をコピーして元の配列を変更しないようにする
+  const shuffled = [...array].sort(() => 0.5 - Math.random());
+  // 指定された数だけ要素を取り出す（配列の長さを超えないように）
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+};
+
 // JobCardコンポーネント - 各求人情報を表示
 const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
+  // 各ジョブカードが表示されるとき、ランダムなタグを生成
+  const [summaryTags, setSummaryTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    // ランダムに3〜5個のタグを選択
+    const tagCount = Math.floor(Math.random() * 3) + 3; // 3, 4, 5のいずれか
+    setSummaryTags(getRandomItems(JOB_SUMMARY_TAGS, tagCount));
+  }, [job.job_id]); // job_idが変わったときだけ再計算（実質マウント時のみ）
+
   // 給与の表示形式を設定する関数 - 単位換算を修正
   const formatSalary = (salary?: number) => {
     if (!salary || salary <= 0) {
@@ -118,18 +147,11 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
       <div className="mb-3">
         <p className="text-sm font-medium mb-1">仕事概要</p>
         <div className="flex flex-wrap gap-1">
-          <span className="bg-gray-200 text-xs px-2 py-1 rounded">
-            業務未経験歓迎
-          </span>
-          <span className="bg-gray-200 text-xs px-2 py-1 rounded">
-            完全週休2日制
-          </span>
-          <span className="bg-gray-200 text-xs px-2 py-1 rounded">
-            年間休日120日以上
-          </span>
-          <span className="bg-gray-200 text-xs px-2 py-1 rounded">
-            学歴不問
-          </span>
+          {summaryTags.map((tag, index) => (
+            <span key={index} className="bg-gray-200 text-xs px-2 py-1 rounded">
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -168,8 +190,8 @@ export default function Home() {
   const searchHistory: string[] = [];
 
   useEffect(() => {
-    // 直前のローカルストレージデータをクリア（テスト用）
-    localStorage.removeItem("matchedJob");
+    // ローカルストレージをクリア（必要に応じて）
+    // localStorage.removeItem('matchedJob');
 
     const fetchJobs = async () => {
       try {
@@ -302,14 +324,13 @@ export default function Home() {
 
         {/* 見出し */}
         {!loading && !error && jobs.length > 0 && (
-          <div className="my-4">
+          <div className="my-4 text-center">
             <h2 className="text-lg font-semibold">
               Life Bridgeがあなたと企業をマッチング
             </h2>
             <h3 className="text-xl font-bold">あなたの志向に合った求人</h3>
           </div>
         )}
-
         {/* ローディング表示 */}
         {loading && (
           <div className="flex justify-center items-center py-10">
