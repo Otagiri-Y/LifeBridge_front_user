@@ -7,78 +7,24 @@ import Footer from "@/components/Footer";
 
 // 営業職の詳細リスト
 const salesJobDetails = [
-  {
-    id: "machinery_electric",
-    name: "機械/電気電子製品営業",
-  },
-  {
-    id: "construction",
-    name: "建設/土木/プラント営業",
-  },
-  {
-    id: "real_estate",
-    name: "不動産営業",
-  },
-  {
-    id: "it_communication",
-    name: "IT/通信製品営業",
-  },
-  {
-    id: "web_game",
-    name: "Webサービス/ゲーム営業",
-  },
-  {
-    id: "automotive",
-    name: "自動車/輸送機器営業",
-  },
-  {
-    id: "hr_outsourcing",
-    name: "人材/アウトソーシング営業",
-  },
-  {
-    id: "finance_insurance",
-    name: "金融/保険営業",
-  },
-  {
-    id: "ad_media_event",
-    name: "広告/メディア/イベント営業",
-  },
-  {
-    id: "cosmetics",
-    name: "化粧品/トイレタリー営業",
-  },
-  {
-    id: "daily_apparel",
-    name: "日用品/アパレル/インテリア営業",
-  },
-  {
-    id: "food_beverage",
-    name: "食品/飲料/嗜好品営業",
-  },
-  {
-    id: "chemical",
-    name: "化学/素材営業",
-  },
-  {
-    id: "metal",
-    name: "鉄鋼/非鉄金属/金属製品営業",
-  },
-  {
-    id: "mr",
-    name: "医療情報担当者/MR",
-  },
-  {
-    id: "medical_device",
-    name: "医療機器/医化学機器営業",
-  },
-  {
-    id: "leisure_travel",
-    name: "レジャー/トラベル営業",
-  },
-  {
-    id: "other_sales",
-    name: "その他営業",
-  },
+  { id: "machinery_electric", name: "機械/電気電子製品営業" },
+  { id: "construction", name: "建設/土木/プラント営業" },
+  { id: "real_estate", name: "不動産営業" },
+  { id: "it_communication", name: "IT/通信製品営業" },
+  { id: "web_game", name: "Webサービス/ゲーム営業" },
+  { id: "automotive", name: "自動車/輸送機器営業" },
+  { id: "hr_outsourcing", name: "人材/アウトソーシング営業" },
+  { id: "finance_insurance", name: "金融/保険営業" },
+  { id: "ad_media_event", name: "広告/メディア/イベント営業" },
+  { id: "cosmetics", name: "化粧品/トイレタリー営業" },
+  { id: "daily_apparel", name: "日用品/アパレル/インテリア営業" },
+  { id: "food_beverage", name: "食品/飲料/嗜好品営業" },
+  { id: "chemical", name: "化学/素材営業" },
+  { id: "metal", name: "鉄鋼/非鉄金属/金属製品営業" },
+  { id: "mr", name: "医療情報担当者/MR" },
+  { id: "medical_device", name: "医療機器/医化学機器営業" },
+  { id: "leisure_travel", name: "レジャー/トラベル営業" },
+  { id: "other_sales", name: "その他営業" },
 ];
 
 export default function SalesDetail() {
@@ -91,27 +37,22 @@ export default function SalesDetail() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // URLからuserIdを取得
     const searchParams = new URLSearchParams(window.location.search);
     const userIdFromUrl = searchParams.get("userId");
     setUserId(userIdFromUrl);
   }, []);
 
-  // 検索フィルター適用
   const filteredDetails = salesJobDetails.filter((detail) =>
     detail.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 詳細選択時の処理
   const handleDetailSelect = (detailId: string, detailName: string) => {
     setSelectedDetail(detailId);
     setSelectedDetailName(detailName);
-    // セッションストレージに保存
     sessionStorage.setItem("jobTypeDetailId", detailId);
     sessionStorage.setItem("jobTypeDetailName", detailName);
   };
 
-  // リセットボタンの処理
   const handleReset = () => {
     setSelectedDetail("");
     setSelectedDetailName("");
@@ -119,15 +60,15 @@ export default function SalesDetail() {
     sessionStorage.removeItem("jobTypeDetailName");
   };
 
-  // 次へボタンの処理
   const handleNext = async () => {
-    if (!userId) {
-      setError("ユーザーIDが見つかりません。登録をやり直してください。");
+    if (!selectedDetail) {
+      setError("職種詳細を選択してください");
       return;
     }
 
-    if (!selectedDetail) {
-      setError("職種詳細を選択してください");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("認証情報が見つかりません。ログインし直してください。");
       return;
     }
 
@@ -135,32 +76,26 @@ export default function SalesDetail() {
     setError("");
 
     try {
-      // APIを呼び出して職種詳細情報をデータベースに保存
-      const response = await fetch("/api/user/update-job-type-detail", {
+      const response = await fetch("http://localhost:8000/api/user/job_type_detail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          userId,
-          jobTypeDetail: selectedDetailName, // 職種詳細名（例：機械/電気電子製品営業）をデータベースに保存
-        }),
+        body: JSON.stringify({ job_type_detail: selectedDetailName }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "職種詳細情報の保存に失敗しました");
+        throw new Error(data.detail || "職種詳細情報の保存に失敗しました");
       }
 
-      // 次の登録ステップに進む（personal_sales_2ページへ遷移）
       router.push(`/personal_sales_2?userId=${userId}`);
     } catch (err) {
       console.error("Error saving job type detail:", err);
       setError(
-        err instanceof Error
-          ? err.message
-          : "エラーが発生しました。もう一度お試しください。"
+        err instanceof Error ? err.message : "エラーが発生しました。もう一度お試しください。"
       );
     } finally {
       setLoading(false);
@@ -170,7 +105,6 @@ export default function SalesDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
-
       <main className="flex-grow px-4 pt-6 pb-20">
         <div className="mb-4">
           <button
@@ -195,7 +129,6 @@ export default function SalesDetail() {
           </button>
         </div>
 
-        {/* パンくずリスト */}
         <div className="flex items-center text-sm mb-4 overflow-x-auto whitespace-nowrap">
           <button
             className="text-gray-500"
@@ -220,7 +153,6 @@ export default function SalesDetail() {
           <button className="text-blue-600 font-medium">営業</button>
         </div>
 
-        {/* 検索バー */}
         <div className="mb-4">
           <div className="relative">
             <input
@@ -256,7 +188,6 @@ export default function SalesDetail() {
           </div>
         )}
 
-        {/* 職種詳細リスト */}
         <div className="space-y-0 mb-24">
           {filteredDetails.map((detail) => (
             <div
@@ -283,7 +214,6 @@ export default function SalesDetail() {
           ))}
         </div>
 
-        {/* 固定ボタンエリア */}
         <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
           <button
             onClick={handleReset}
