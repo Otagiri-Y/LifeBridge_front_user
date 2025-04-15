@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function PersonalCompany() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const _userId = searchParams.get("userId");
 
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);

@@ -69,7 +69,7 @@ export default function WorkEnvironmentSelection() {
   const [selections, setSelections] = useState<Record<string, string>>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [, _setSearchLoading] = useState(false);
+  const [searchLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -148,7 +148,9 @@ export default function WorkEnvironmentSelection() {
       localStorage.setItem("matchedJob", JSON.stringify(matchedJob));
       router.push("/home");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "検索中にエラーが発生しました");
+      setError(
+        err instanceof Error ? err.message : "検索中にエラーが発生しました"
+      );
     }
   };
 
@@ -163,9 +165,23 @@ export default function WorkEnvironmentSelection() {
       <main className="flex-grow px-4 pt-6 pb-48">
         {/* 戻るボタン */}
         <div className="mb-4">
-          <button onClick={() => router.back()} className="flex items-center text-xl font-semibold">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          <button
+            onClick={() => router.back()}
+            className="flex items-center text-xl font-semibold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
             </svg>
             求める環境・価値観
           </button>
@@ -200,20 +216,34 @@ export default function WorkEnvironmentSelection() {
           </div>
         </div>
         {/* エラーメッセージ */}
-        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
         {/* 成功メッセージ */}
-        {successMessage && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{successMessage}</div>}
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {successMessage}
+          </div>
+        )}
         {/* カテゴリごとの選択肢 */}
         <div className="mb-20 space-y-6">
           {/* 各カテゴリを順に表示 */}
           {Object.entries(environmentOptions).map(([category, options]) => {
-            const filtered = searchTerm ? options.filter((o) => o.name.toLowerCase().includes(searchTerm.toLowerCase())) : options;
+            const filtered = searchTerm
+              ? options.filter((o) =>
+                  o.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+              : options;
             if (filtered.length === 0) return null;
 
             return (
               <div key={category} className="space-y-2">
                 {/* カテゴリタイトル */}
-                <h3 className="font-medium text-gray-800">{categoryTitles[category]}</h3>
+                <h3 className="font-medium text-gray-800">
+                  {categoryTitles[category]}
+                </h3>
                 {/* オプションの表示（2列グリッド） */}
                 <div className="grid grid-cols-2 gap-3">
                   {filtered.map((option) => {
@@ -222,17 +252,29 @@ export default function WorkEnvironmentSelection() {
                     return (
                       <div
                         key={option.id}
-                        className={`flex items-center border rounded-md p-3 h-14 cursor-pointer ${isSelected ? "bg-blue-50" : "bg-gray-50"} ${colSpan}`}
+                        className={`flex items-center border rounded-md p-3 h-14 cursor-pointer ${
+                          isSelected ? "bg-blue-50" : "bg-gray-50"
+                        } ${colSpan}`}
                         onClick={() => handleSelect(category, option.name)}
                       >
                         <div className="w-5 h-5 mr-2 border border-gray-300 flex items-center justify-center bg-white">
                           {isSelected && (
-                            <svg className="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            <svg
+                              className="h-4 w-4 text-blue-500"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           )}
                         </div>
-                        <span className="text-sm truncate max-w-full">{option.name}</span>
+                        <span className="text-sm truncate max-w-full">
+                          {option.name}
+                        </span>
                       </div>
                     );
                   })}
@@ -260,7 +302,6 @@ export default function WorkEnvironmentSelection() {
                   ? "bg-blue-700 hover:bg-blue-800"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
-              
             >
               {loading ? "保存中..." : "登録する"}
             </button>
