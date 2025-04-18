@@ -30,9 +30,6 @@ export default function Register() {
     setLoading(true);
     setError("");
 
-    const API_BASE_URL =
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
     try {
       if (!formData.name || !formData.email || !formData.password) {
         throw new Error("必須項目を入力してください");
@@ -40,6 +37,9 @@ export default function Register() {
       if (formData.password.length < 6) {
         throw new Error("パスワードは6文字以上で入力してください");
       }
+
+      const API_BASE_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
       const response = await fetch(`${API_BASE_URL}/api/signup`, {
         method: "POST", // この行を追加

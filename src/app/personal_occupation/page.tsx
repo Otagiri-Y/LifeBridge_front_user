@@ -127,12 +127,14 @@ function PersonalOccupationContent() {
       setError("認証情報が見つかりません。ログインし直してください。");
       return;
     }
+    
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     setLoading(true);
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/job_type", {
+      const response = await fetch(`${API_BASE_URL}/api/user/job_type`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

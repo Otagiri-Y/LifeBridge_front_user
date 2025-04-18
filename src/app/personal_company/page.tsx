@@ -12,6 +12,8 @@ export default function PersonalCompany() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
   const handleNext = async () => {
     if (!companyName.trim()) {
       setError("会社名を入力してください。");
@@ -28,7 +30,7 @@ export default function PersonalCompany() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/company", {
+      const response = await fetch(`${API_BASE_URL}/api/user/company`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +38,7 @@ export default function PersonalCompany() {
         },
         body: JSON.stringify({ company_name: companyName }),
       });
-
+      
       const data = await response.json();
 
       if (!response.ok) {

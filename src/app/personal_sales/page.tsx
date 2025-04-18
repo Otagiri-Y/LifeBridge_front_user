@@ -74,9 +74,11 @@ export default function SalesDetail() {
 
     setLoading(true);
     setError("");
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/job_type_detail", {
+      const response = await fetch(`${API_BASE_URL}/api/user/job_type_detail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +97,9 @@ export default function SalesDetail() {
     } catch (err) {
       console.error("Error saving job type detail:", err);
       setError(
-        err instanceof Error ? err.message : "エラーが発生しました。もう一度お試しください。"
+        err instanceof Error
+          ? err.message
+          : "エラーが発生しました。もう一度お試しください。"
       );
     } finally {
       setLoading(false);

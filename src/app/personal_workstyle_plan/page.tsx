@@ -97,8 +97,12 @@ export default function WorkEnvironmentSelection() {
 
     setLoading(true);
     setError("");
+
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
     try {
-      const response = await fetch("http://localhost:8000/api/user/matching", {
+      const response = await fetch(`${API_BASE_URL}/api/user/matching`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
