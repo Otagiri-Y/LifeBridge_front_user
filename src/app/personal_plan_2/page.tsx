@@ -43,7 +43,9 @@ export default function JobDetailMultipleSelection() {
       return;
     }
 
-    fetch("http://localhost:8000/api/auth/check", {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+    fetch(`${API_BASE_URL}/api/auth/check`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
