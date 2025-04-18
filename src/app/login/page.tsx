@@ -28,13 +28,14 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
-        // または /api/login
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const response = await fetch(`${API_BASE_URL}/api/signup`, {
+        method: "POST", // メソッドを明示的にPOSTに指定
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}), // 空のJSONオブジェクトを送信
       });
-
       const data = await response.json();
 
       if (!response.ok) {
