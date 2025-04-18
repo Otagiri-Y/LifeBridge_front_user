@@ -30,6 +30,9 @@ export default function Register() {
     setLoading(true);
     setError("");
 
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
     try {
       if (!formData.name || !formData.email || !formData.password) {
         throw new Error("必須項目を入力してください");
@@ -38,8 +41,8 @@ export default function Register() {
         throw new Error("パスワードは6文字以上で入力してください");
       }
 
-      const response = await fetch("http://localhost:8000/api/signup", {
-        method: "POST",
+      const response = await fetch(`${API_BASE_URL}/api/signup`, {
+        // または /api/login
         headers: {
           "Content-Type": "application/json",
         },
@@ -78,12 +81,54 @@ export default function Register() {
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input type="text" name="name" placeholder="氏名" value={formData.name} onChange={handleChange} className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-            <input type="text" name="address" placeholder="住所" value={formData.address} onChange={handleChange} className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <input type="date" name="birth_date" placeholder="年/月/日" value={formData.birth_date} onChange={handleChange} className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <input type="email" name="email" placeholder="メールアドレス" value={formData.email} onChange={handleChange} className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-            <input type="password" name="password" placeholder="パスワード" value={formData.password} onChange={handleChange} className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-            <button type="submit" className="w-full py-4 bg-blue-700 text-white font-bold rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition" disabled={loading}>
+            <input
+              type="text"
+              name="name"
+              placeholder="氏名"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="住所"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="date"
+              name="birth_date"
+              placeholder="年/月/日"
+              value={formData.birth_date}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="メールアドレス"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="パスワード"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="submit"
+              className="w-full py-4 bg-blue-700 text-white font-bold rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+              disabled={loading}
+            >
               {loading ? "登録中..." : "同意して会員登録"}
             </button>
           </form>

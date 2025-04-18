@@ -12,8 +12,10 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // useEffect によるトークン検証と自動ログインの処理を削除
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+  // useEffect によるトークン検証と自動ログインの処理を削除
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -26,15 +28,16 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/login", {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
+        // または /api/login
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
+      if (!response.ok) {
         throw new Error(data.detail || "ログインに失敗しました");
       }
 
