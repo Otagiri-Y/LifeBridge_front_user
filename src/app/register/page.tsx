@@ -42,7 +42,7 @@ export default function Register() {
       }
 
       const response = await fetch(`${API_BASE_URL}/api/signup`, {
-        // または /api/login
+        method: "POST", // この行を追加
         headers: {
           "Content-Type": "application/json",
         },
