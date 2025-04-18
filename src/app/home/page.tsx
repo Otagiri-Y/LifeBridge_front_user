@@ -324,14 +324,13 @@ export default function Home() {
 
         {/* 見出し */}
         {!loading && !error && jobs.length > 0 && (
-          <div className="my-4">
+          <div className="my-4 text-center">
             <h2 className="text-lg font-semibold">
               Life Bridgeがあなたと企業をマッチング
             </h2>
             <h3 className="text-xl font-bold">あなたの志向に合った求人</h3>
           </div>
         )}
-
         {/* ローディング表示 */}
         {loading && (
           <div className="flex justify-center items-center py-10">
