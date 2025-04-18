@@ -42,6 +42,7 @@ export default function Login() {
       // トークンをローカルストレージではなく、メモリ上の変数として扱う
       // このトークンはページを離れると消えるため、毎回ログインが必要になる
       const token = data.access_token;
+      localStorage.setItem("token", token);
 
       // API呼び出しにトークンを使用
       router.push("/home");
