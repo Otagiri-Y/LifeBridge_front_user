@@ -7,7 +7,7 @@ import SearchBar from "@/components/SearchBar";
 import Link from "next/link";
 
 // APIのベースURLを環境変数または定数として定義
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // 仕事概要に表示する可能性のあるタグのリスト
 const JOB_SUMMARY_TAGS = [
@@ -218,7 +218,7 @@ export default function Home() {
         }
 
         // FastAPIサーバーのURLを指定（認証トークン付き）
-        const response = await fetch(`${API_BASE_URL}/api/user/search`, {
+        const response = await fetch(`${API_BASE_URL}/api/signup`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
