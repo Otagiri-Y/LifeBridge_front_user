@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import Link from "next/link";
 
-// APIのベースURLを環境変数または定数として定義
+// APIのベースURLを環境変数または定数として定義義
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // 仕事概要に表示する可能性のあるタグのリスト
