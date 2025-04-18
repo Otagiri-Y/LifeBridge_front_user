@@ -136,8 +136,11 @@ export default function WorkEnvironmentSelection() {
     const token = localStorage.getItem("token");
     if (!token) return setError("トークンが見つかりません");
 
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
     try {
-      const res = await fetch("http://localhost:8000/api/user/search", {
+      const res = await fetch(`${API_BASE_URL}/api/user/search`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
