@@ -1,4 +1,3 @@
-// components/SearchBar.tsx
 import React from "react";
 import { SearchIcon } from "lucide-react";
 
@@ -12,7 +11,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   searchHistory = [],
 }) => {
   return (
-    <div className="bg-blue-100 p-4 w-full">
+    <div className="bg-secondary-blue p-4 w-full">
       {/* 最終更新日時 */}
       <div className="text-gray-500 text-sm mb-2">{lastUpdated}</div>
 
@@ -24,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <input
           type="text"
           placeholder="気になる企業を探す  勤務地、職種などを選択"
-          className="pl-10 pr-4 py-2 w-full rounded-full border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="pl-10 pr-4 py-2 w-full rounded-full border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-primary-navy focus:border-transparent"
         />
       </div>
 
@@ -34,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {searchHistory.length > 0 ? (
           <ul>
             {searchHistory.map((item, index) => (
-              <li key={index} className="text-blue-500">
+              <li key={index} className="text-primary-navy">
                 {item}
               </li>
             ))}

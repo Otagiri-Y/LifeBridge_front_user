@@ -43,7 +43,8 @@ export default function JobDetailMultipleSelection() {
       return;
     }
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     fetch(`${API_BASE_URL}/api/auth/check`, {
       method: "GET",
@@ -64,7 +65,9 @@ export default function JobDetailMultipleSelection() {
   const handleDetailSelect = (detailId: string, detailName: string) => {
     if (selectedDetails.includes(detailId)) {
       setSelectedDetails((prev) => prev.filter((id) => id !== detailId));
-      setSelectedDetailNames((prev) => prev.filter((name) => name !== detailName));
+      setSelectedDetailNames((prev) =>
+        prev.filter((name) => name !== detailName)
+      );
     } else {
       setSelectedDetails((prev) => [...prev, detailId]);
       setSelectedDetailNames((prev) => [...prev, detailName]);
@@ -88,8 +91,14 @@ export default function JobDetailMultipleSelection() {
     }
 
     // 擬似的に選択データを保存（バックエンドへは送信しない）
-    sessionStorage.setItem("selectedJobDetails", JSON.stringify(selectedDetails));
-    sessionStorage.setItem("selectedJobDetailNames", JSON.stringify(selectedDetailNames));
+    sessionStorage.setItem(
+      "selectedJobDetails",
+      JSON.stringify(selectedDetails)
+    );
+    sessionStorage.setItem(
+      "selectedJobDetailNames",
+      JSON.stringify(selectedDetailNames)
+    );
 
     router.push(`/personal_workstyle_plan?userId=${userId}`);
   };
@@ -104,8 +113,19 @@ export default function JobDetailMultipleSelection() {
             onClick={() => router.push(`/personal_plan?userId=${userId}`)}
             className="flex items-center text-xl font-semibold"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
             </svg>
             直近の経歴の職種
           </button>
@@ -130,7 +150,9 @@ export default function JobDetailMultipleSelection() {
         <div className="mb-8 space-y-4">
           {jobDetailOptions.map((row, rowIndex) => {
             const filtered = searchTerm
-              ? row.filter((detail) => detail.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              ? row.filter((detail) =>
+                  detail.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
               : row;
             if (filtered.length === 0) return null;
 
@@ -140,13 +162,19 @@ export default function JobDetailMultipleSelection() {
                   <div
                     key={detail.id}
                     className={`p-4 flex items-center border rounded-md cursor-pointer ${
-                      selectedDetails.includes(detail.id) ? "bg-blue-50" : "bg-gray-50"
+                      selectedDetails.includes(detail.id)
+                        ? "bg-blue-50"
+                        : "bg-gray-50"
                     } ${filtered.length === 1 ? "col-span-2" : ""}`}
                     onClick={() => handleDetailSelect(detail.id, detail.name)}
                   >
                     <div className="w-6 h-6 mr-3 border border-gray-300 flex items-center justify-center bg-white">
                       {selectedDetails.includes(detail.id) && (
-                        <svg className="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="h-5 w-5 text-blue-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path
                             fillRule="evenodd"
                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -166,7 +194,7 @@ export default function JobDetailMultipleSelection() {
         <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
           <button
             onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700"
+            className="px-8 py-3 border border-gray-600 rounded-full text-gray-700"
           >
             リセット
           </button>
@@ -174,7 +202,7 @@ export default function JobDetailMultipleSelection() {
             onClick={handleNext}
             disabled={selectedDetails.length === 0}
             className={`px-8 py-3 rounded-full text-white ${
-              selectedDetails.length > 0 ? "bg-blue-700" : "bg-gray-400"
+              selectedDetails.length > 0 ? "bg-primary-navy" : "bg-gray-400"
             }`}
           >
             次へ進む

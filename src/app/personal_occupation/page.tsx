@@ -280,7 +280,7 @@ function PersonalOccupationContent() {
             sessionStorage.removeItem("jobTypeId");
             sessionStorage.removeItem("jobTypeName");
           }}
-          className="px-8 py-3 border border-gray-300 rounded-full text-gray-700"
+          className="px-8 py-3 border border-gray-600 rounded-full text-gray-700"
         >
           リセット
         </button>
@@ -288,7 +288,7 @@ function PersonalOccupationContent() {
           onClick={handleNext}
           disabled={loading || !selectedJobType}
           className={`px-8 py-3 rounded-full text-white ${
-            selectedJobType ? "bg-blue-700" : "bg-gray-400"
+            selectedJobType ? "bg-primary-navy" : "bg-gray-400"
           }`}
         >
           {loading ? "処理中..." : "次へ進む"}

@@ -295,7 +295,7 @@ export default function WorkEnvironmentSelection() {
           <div className="flex justify-between">
             <button
               onClick={handleReset}
-              className="w-40 py-3 border border-gray-300 rounded-full text-gray-700 bg-white hover:bg-gray-100 transition-colors"
+              className="w-40 py-3 border border-gray-600 rounded-full text-primary-navy bg-white hover:bg-gray-100 transition-colors"
             >
               リセット
             </button>
@@ -304,7 +304,7 @@ export default function WorkEnvironmentSelection() {
               disabled={loading}
               className={`w-40 py-3 rounded-full text-white transition-colors ${
                 hasSelections
-                  ? "bg-blue-700 hover:bg-blue-800"
+                  ? "bg-primary-navy hover:bg-blue-800"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
             >
@@ -316,7 +316,7 @@ export default function WorkEnvironmentSelection() {
             disabled={searchLoading}
             className={`w-full py-3 rounded-full text-white font-medium transition-colors ${
               hasSelections
-                ? "bg-red-600 hover:bg-red-700"
+                ? "bg-red-700 hover:bg-red-700"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
           >

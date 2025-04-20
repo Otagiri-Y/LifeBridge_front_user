@@ -159,7 +159,7 @@ export default function JobDetailSelection() {
         <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
           <button
             onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700"
+            className="px-8 py-3 border border-gray-600 rounded-full text-gray-700"
           >
             リセット
           </button>
@@ -167,7 +167,7 @@ export default function JobDetailSelection() {
             onClick={handleNext}
             disabled={!selectedDetail}
             className={`px-8 py-3 rounded-full text-white ${
-              selectedDetail ? "bg-blue-700" : "bg-gray-400"
+              selectedDetail ? "bg-primary-navy" : "bg-gray-400"
             }`}
           >
             次へ進む
