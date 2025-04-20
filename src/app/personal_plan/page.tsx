@@ -151,7 +151,7 @@ export default function MarketingOccupation() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <button className="text-blue-600 font-medium">
+          <button className="text-blue-900 font-medium">
             企画/マーケティング/カスタマーサクセス
           </button>
         </div>
@@ -222,7 +222,7 @@ export default function MarketingOccupation() {
         <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
           <button
             onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700"
+            className="px-8 py-3 border border-gray-600 rounded-full text-bg-primary-navy"
           >
             リセット
           </button>
@@ -230,7 +230,7 @@ export default function MarketingOccupation() {
             onClick={handleNext}
             disabled={loading || !selectedOccupation}
             className={`px-8 py-3 rounded-full text-white ${
-              selectedOccupation ? "bg-blue-700" : "bg-gray-400"
+              selectedOccupation ? "bg-primary-navy" : "bg-gray-400"
             }`}
           >
             {loading ? "処理中..." : "次へ進む"}

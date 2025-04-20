@@ -154,7 +154,7 @@ export default function SalesDetail() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <button className="text-blue-600 font-medium">営業</button>
+          <button className="text-blue-900 font-medium">営業</button>
         </div>
 
         <div className="mb-4">
@@ -221,7 +221,7 @@ export default function SalesDetail() {
         <div className="fixed bottom-16 left-0 right-0 flex items-center justify-between px-4 py-3 bg-white border-t">
           <button
             onClick={handleReset}
-            className="px-8 py-3 border border-gray-300 rounded-full text-gray-700"
+            className="px-8 py-3 border border-gray-600 rounded-full text-gray-700"
           >
             リセット
           </button>
@@ -229,7 +229,7 @@ export default function SalesDetail() {
             onClick={handleNext}
             disabled={loading || !selectedDetail}
             className={`px-8 py-3 rounded-full text-white ${
-              selectedDetail ? "bg-blue-700" : "bg-gray-400"
+              selectedDetail ? "bg-primary-navy" : "bg-gray-400"
             }`}
           >
             {loading ? "処理中..." : "次へ進む"}

@@ -1,4 +1,3 @@
-// src/components/Buttons/MemberRegister.tsx
 import React from "react";
 
 type BadgeType = {
@@ -9,7 +8,7 @@ type BadgeType = {
 type MemberRegisterProps = {
   text: string;
   badge?: BadgeType;
-  onClick?: () => void; // onClickはオプションに変更
+  onClick?: () => void;
 };
 
 const MemberRegister: React.FC<MemberRegisterProps> = ({
@@ -21,7 +20,7 @@ const MemberRegister: React.FC<MemberRegisterProps> = ({
   const getBadgeColor = (color: string) => {
     switch (color) {
       case "red":
-        return "bg-red-500";
+        return "bg-accent-red";
       case "blue":
         return "bg-blue-500";
       case "green":
@@ -33,19 +32,19 @@ const MemberRegister: React.FC<MemberRegisterProps> = ({
 
   return (
     <button
-      className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg w-full relative"
+      className="bg-primary-navy hover:opacity-90 text-white font-bold py-4 px-6 rounded-lg w-full relative text-lg"
       onClick={onClick}
     >
+      {text}
       {badge && (
         <span
-          className={`absolute -top-2 -right-2 ${getBadgeColor(
+          className={`absolute top-0 right-0 ${getBadgeColor(
             badge.color
-          )} text-white text-xs px-2 py-1 rounded-full`}
+          )} text-white text-xs px-2 py-1 rounded-sm transform translate-x-1 -translate-y-1`}
         >
           {badge.text}
         </span>
       )}
-      {text}
     </button>
   );
 };

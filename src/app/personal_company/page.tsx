@@ -106,7 +106,7 @@ export default function PersonalCompany() {
         <button
           onClick={handleNext}
           disabled={loading}
-          className="w-full py-4 bg-blue-700 text-white font-bold rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          className="w-full py-4 bg-primary-navy text-white font-bold rounded-full hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-navy focus:ring-opacity-50 transition"
         >
           {loading ? "処理中..." : "次へ進む"}
         </button>

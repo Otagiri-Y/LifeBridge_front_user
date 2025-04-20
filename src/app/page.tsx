@@ -5,9 +5,11 @@ import MainContent from "@/components/MainContent";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
-      <MainContent />
+      <div className="flex-1 flex flex-col">
+        <MainContent />
+      </div>
       <Footer />
     </div>
   );

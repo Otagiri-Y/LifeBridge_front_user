@@ -163,7 +163,7 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
       <div className="flex flex-col gap-2">
         <Link
           href={`/personal_job_detail/`}
-          className="w-full bg-blue-700 text-white text-center py-3 rounded font-medium"
+          className="w-full bg-primary-navy text-white text-center py-3 rounded font-medium"
         >
           オファーする
         </Link>

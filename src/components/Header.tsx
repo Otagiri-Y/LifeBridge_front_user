@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 import React from 'react';
 import Link from 'next/link';
 
@@ -6,7 +5,7 @@ export default function Header() {
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-black no-underline hover:text-blue-600 transition-colors">
+        <Link href="/" className="text-2xl font-bold text-black no-underline transition-colors">
           Life Bridge
         </Link>
         <button className="focus:outline-none">

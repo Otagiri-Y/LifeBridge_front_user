@@ -126,7 +126,7 @@ export default function Register() {
             />
             <button
               type="submit"
-              className="w-full py-4 bg-blue-700 text-white font-bold rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+              className="w-full py-4 bg-primary-navy text-white font-bold rounded-full hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-navy focus:ring-opacity-50 transition"
               disabled={loading}
             >
               {loading ? "登録中..." : "同意して会員登録"}
