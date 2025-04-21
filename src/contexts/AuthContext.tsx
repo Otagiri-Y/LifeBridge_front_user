@@ -9,14 +9,8 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 
-// ユーザー型の定義
-type User = {
-  id: number;
-  email: string;
-  // 必要に応じて他のユーザー情報を追加
-};
-
-// 認証コンテキストの型定義
+/* ===== 型定義 ===== */
+type User = { user_id: number; email: string; name: string };
 type AuthContextType = {
   user: User | null;
   loading: boolean;
@@ -26,104 +20,97 @@ type AuthContextType = {
   clearError: () => void;
 };
 
-// コンテキストの作成
+/* ===== 環境変数 ===== */
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+/* ===== コンテキスト作成 ===== */
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// AuthProviderのpropsの型定義
-type AuthProviderProps = {
-  children: ReactNode;
-};
-
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // 初期化時にローカルストレージからユーザー情報を取得
+  /* ---------- 初期化：保存トークンで /api/me ---------- */
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error("ユーザー情報の解析に失敗しました", e);
-        localStorage.removeItem("user");
-      }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    fetch(`${API_BASE_URL}/api/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("トークンが無効です");
+        return res.json();
+      })
+      .then((u) => setUser(u))
+      .catch(() => {
+        localStorage.removeItem("token");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  // ログイン処理
+  /* ---------- ログイン ---------- */
   const login = async (email: string, password: string) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      /* 1) 認証してトークン取得 */
+      const res = await fetch(`${API_BASE_URL}/api/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+      const loginData = await res.json();
+      if (!res.ok) throw new Error(loginData.detail ?? "ログインに失敗しました");
 
-      const data = await response.json();
+      /* 2) トークン保存 */
+      const token: string = loginData.access_token;
+      localStorage.setItem("token", token);
 
-      if (!response.ok) {
-        throw new Error(data.message || "ログインに失敗しました");
-      }
+      /* 3) /api/me でユーザー情報取得 */
+      const meRes = await fetch(`${API_BASE_URL}/api/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!meRes.ok) throw new Error("ユーザー情報の取得に失敗しました");
+      const me: User = await meRes.json();
+      setUser(me);
 
-      // ユーザー情報を設定
-      const loggedInUser = { id: data.user.id, email: data.user.email };
-      setUser(loggedInUser);
-
-      // ローカルストレージに保存
-      localStorage.setItem("user", JSON.stringify(loggedInUser));
-
-      // ホームページへリダイレクト
       router.push("/home");
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("不明なエラーが発生しました");
-      }
-      console.error("Login error:", err);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "不明なエラーが発生しました");
     } finally {
       setLoading(false);
     }
   };
 
-  // ログアウト処理
+  /* ---------- ログアウト ---------- */
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
-    localStorage.removeItem("user");
     router.push("/login");
   };
 
-  // エラーをクリア
-  const clearError = () => {
-    setError(null);
-  };
+  const clearError = () => setError(null);
 
-  const value = {
-    user,
-    loading,
-    error,
-    login,
-    logout,
-    clearError,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{ user, loading, error, login, logout, clearError }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-// カスタムフック
+/* ===== カスタムフック ===== */
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 }
