@@ -224,7 +224,6 @@ export default function Home() {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({}), // 空のJSONオブジェクトを送信
         });
 
         // レスポンスのステータスコードをチェック
