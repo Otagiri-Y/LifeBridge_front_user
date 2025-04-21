@@ -190,56 +190,70 @@ export default function Home() {
   const searchHistory: string[] = [];
 
   useEffect(() => {
+    // ローカルストレージをクリア（必要に応じて）
+    // localStorage.removeItem('matchedJob');
+
     const fetchJobs = async () => {
       try {
         setLoading(true);
 
-        /* ---------- キャッシュ ---------- */
-        const saved = localStorage.getItem("matchedJob");
-        if (saved) {
-          setJobs(JSON.parse(saved));
+        // ローカルストレージから保存されたデータを取得
+        const savedJobs = localStorage.getItem("matchedJob");
+
+        if (savedJobs) {
+          // 保存されているデータがあればそれを使用
+          const parsedJobs = JSON.parse(savedJobs);
+          console.log("Saved Jobs Data:", parsedJobs);
+          setJobs(parsedJobs);
+          setError("");
           return;
         }
 
-        /* ---------- トークン取得 ---------- */
+        // 保存データがなければAPIを呼び出す（認証付き）
         const token = localStorage.getItem("token");
         if (!token) {
           setError("認証情報がありません。再度ログインしてください。");
-          return;
-        }
-
-        /* ---------- （任意）トークン検証 ---------- */
-        // const meRes = await fetch(`${API_BASE_URL}/api/me`, {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // });
-        // if (meRes.status === 401) {
-        //   setError("認証期限が切れています。再度ログインしてください。");
-        //   return;
-        // }
-
-        /* ---------- 求人取得 ---------- */
-        const res = await fetch(`${API_BASE_URL}/api/matched_jobs`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!res.ok) {
-          if (res.status === 404) {
-            setError("検索条件に一致する求人が見つかりませんでした。");
-          } else if (res.status === 401) {
-            setError("認証期限が切れています。再度ログインしてください。");
-          } else {
-            throw new Error(`API error: ${res.status}`);
-          }
           setJobs([]);
           return;
         }
 
-        const jobList: JobData[] = await res.json();
-        setJobs(jobList);
-        localStorage.setItem("matchedJob", JSON.stringify(jobList));
+        // FastAPIサーバーのURLを指定（認証トークン付き）
+        const response = await fetch(`${API_BASE_URL}/api/signup`, {
+          method: "POST", // メソッドを明示的にPOSTに指定
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}), // 空のJSONオブジェクトを送信
+        });
+
+        // レスポンスのステータスコードをチェック
+        if (!response.ok) {
+          if (response.status === 404) {
+            setJobs([]);
+            setError("検索条件に一致する求人が見つかりませんでした。");
+          } else if (response.status === 401) {
+            setError("認証期限が切れています。再度ログインしてください。");
+          } else {
+            throw new Error(`API error: ${response.status}`);
+          }
+          return;
+        }
+
+        // Content-Typeをチェック
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("APIからの応答が不正です");
+        }
+
+        const data = await response.json();
+        console.log("API Response Data:", data);
+        setJobs(data);
+        // 取得したデータをローカルストレージに保存
+        localStorage.setItem("matchedJob", JSON.stringify(data));
         setError("");
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.error("求人データの取得に失敗しました:", err);
         setError(
           "データの読み込み中にエラーが発生しました。しばらくしてから再度お試しください。"
         );
