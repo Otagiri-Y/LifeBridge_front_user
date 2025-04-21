@@ -217,15 +217,12 @@ export default function Home() {
           return;
         }
 
-        // FastAPIサーバーのURLを指定（認証トークン付き）
-        const response = await fetch(`${API_BASE_URL}/api/login`, {
-          method: "POST", // メソッドを明示的にPOSTに指定
+        // src/app/home/page.tsx （修正版）
+        const response = await fetch(`${API_BASE_URL}/api/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
-          body: JSON.stringify({}), // 空のJSONオブジェクトを送信
-        });
+        }); // ← GET がデフォルトなので method 指定も body も不要
 
         // レスポンスのステータスコードをチェック
         if (!response.ok) {
