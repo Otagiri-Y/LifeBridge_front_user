@@ -217,7 +217,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
       {/* 検索ボタン - buttonからLinkに変更 */}
       <Link
         href="/personal_job_detail"
-        className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg w-full mt-8 block text-center"
+        className="bg-primary-navy hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg w-full mt-8 block text-center"
         onClick={() => {
           // 元の検索処理も実行
           onSearch();

@@ -77,7 +77,7 @@ export default function OfferList() {
           <div className="flex border-b">
             <button
               className={`flex-1 py-2 text-center ${
-                activeTab === "personal" ? "text-blue-600 border-b-2 border-blue-600 font-medium" : "text-gray-500"
+                activeTab === "personal" ? "text-blue-900 border-b-4 border-blue-900 font-medium" : "text-gray-500"
               }`}
               onClick={() => setActiveTab("personal")}
             >
@@ -86,7 +86,7 @@ export default function OfferList() {
             <Link
               href="/offer_company"
               className={`flex-1 py-2 text-center ${
-                activeTab === "company" ? "text-blue-600 border-b-2 border-blue-600 font-medium" : "text-gray-500"
+                activeTab === "company" ? "text-blue-900 border-b-4 border-blue-900 font-medium" : "text-gray-500"
               }`}
             >
               企業のオファー
@@ -146,7 +146,7 @@ export default function OfferList() {
               {/* 詳細ボタン */}
               <Link 
                 href={`/personal_job_detail/`}
-                className="block w-full bg-blue-700 text-white text-center py-2 rounded-md hover:bg-blue-800 transition-colors"
+                className="block w-full bg-primary-navy text-white text-center py-2 rounded-md hover:bg-blue-800 transition-colors"
               >
                 求人詳細を見る
               </Link>

@@ -53,7 +53,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             >
               <span className="flex-grow">指定なし</span>
               {selectedValue === null && (
-                <span className="text-blue-500">✓</span>
+                <span className="text-blue-700">✓</span>
               )}
             </button>
 
@@ -68,7 +68,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               >
                 <span className="flex-grow">{option.label}</span>
                 {selectedValue === option.value && (
-                  <span className="text-blue-500">✓</span>
+                  <span className="text-blue-700">✓</span>
                 )}
               </button>
             ))}
@@ -79,7 +79,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
         <div className="border-t p-4">
           <button
             onClick={onClose}
-            className="w-full py-2 bg-blue-700 text-white rounded-lg font-medium"
+            className="w-full py-2 bg-primary-navy text-white rounded-lg font-medium"
           >
             決定
           </button>

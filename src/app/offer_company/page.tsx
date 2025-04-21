@@ -97,14 +97,14 @@ export default function OfferCompanyList() {
               href="/offer_user"
               className={`flex-1 py-2 text-center ${
                 activeTab === "personal"
-                  ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+                  ? "text-bg-primary-navy border-b-2 border-blue-900 font-medium"
                   : "text-gray-500"
               }`}
             >
               あなたのオファー
             </Link>
             <button
-              className="flex-1 py-2 text-center text-blue-600 border-b-4 border-blue-600 font-medium"
+              className="flex-1 py-2 text-center text-blue-900 border-b-4 border-blue-900 font-medium"
               onClick={() => setActiveTab("company")}
             >
               企業のオファー
@@ -173,13 +173,13 @@ export default function OfferCompanyList() {
               <div className="grid grid-cols-2 gap-2">
                 <Link
                   href={`/personal_job_detail`}
-                  className="py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors text-center"
+                  className="py-2 px-4 border border-gray-500 rounded-md text-blue-900 hover:bg-gray-300 transition-colors text-center"
                 >
                   応募する
                 </Link>
                 <Link
                   href={`/personal_job_detail/`}
-                  className="bg-blue-700 text-white text-center py-2 px-4 rounded-md hover:bg-blue-800 transition-colors"
+                  className="bg-primary-navy text-white text-center py-2 px-4 rounded-md hover:bg-blue-800 transition-colors"
                 >
                   求人詳細を見る
                 </Link>
