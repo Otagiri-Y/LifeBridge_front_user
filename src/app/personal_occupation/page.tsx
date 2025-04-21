@@ -280,7 +280,7 @@ function PersonalOccupationContent() {
             sessionStorage.removeItem("jobTypeId");
             sessionStorage.removeItem("jobTypeName");
           }}
-          className="px-8 py-3 border border-gray-600 rounded-full text-gray-700"
+          className="px-8 py-3 border border-gray-600 rounded-full text-blue-700"
         >
           リセット
         </button>
