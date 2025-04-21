@@ -219,7 +219,7 @@ export default function Home() {
 
         // FastAPIサーバーのURLを指定（認証トークン付き）
         const response = await fetch(`${API_BASE_URL}/api/user/search`, {
-          method: "POST", // メソッドを明示的にPOSTに指定
+          method: "GET", // メソッドを明示的にPOSTに指定
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
