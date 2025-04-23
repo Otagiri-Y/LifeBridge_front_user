@@ -74,7 +74,9 @@ export default function Register() {
       <Header />
       <main className="flex-grow flex flex-col items-center justify-center px-4 py-6">
         <div className="w-full max-w-md">
-          <h1 className="text-3xl text-black font-bold text-center mb-8">新規会員登録</h1>
+          <h1 className="text-3xl text-black font-bold text-center mb-8">
+            新規会員登録
+          </h1>
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
               {error}
@@ -99,10 +101,16 @@ export default function Register() {
               className="w-full px-4 py-4 border text-black border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
-              type="date"
+              type="text"
               name="birth_date"
               placeholder="年/月/日"
               value={formData.birth_date}
+              onFocus={(e) => ((e.target as HTMLInputElement).type = "date")}
+              onBlur={(e) => {
+                if (!(e.target as HTMLInputElement).value) {
+                  (e.target as HTMLInputElement).type = "text";
+                }
+              }}
               onChange={handleChange}
               className="w-full px-4 py-4 border text-black border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

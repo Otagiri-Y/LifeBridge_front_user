@@ -132,7 +132,7 @@ export default function MarketingOccupation() {
 
         <div className="flex items-center text-sm mb-4 overflow-x-auto whitespace-nowrap">
           <button
-            className="text-gray-500"
+            className="text-black"
             onClick={() => router.push(`/personal_occupation?userId=${userId}`)}
           >
             全て
@@ -195,7 +195,7 @@ export default function MarketingOccupation() {
           {filteredOccupations.map((occupation) => (
             <div
               key={occupation.id}
-              className={`border-b border-gray-200 py-3 px-2 flex justify-between items-center cursor-pointer ${
+              className={`border-b border-gray-500 py-3 px-2 flex justify-between items-center cursor-pointer ${
                 selectedOccupation === occupation.id ? "bg-blue-50" : ""
               }`}
               onClick={() =>
@@ -205,7 +205,7 @@ export default function MarketingOccupation() {
               <div className="font-medium">{occupation.name}</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 text-black"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
