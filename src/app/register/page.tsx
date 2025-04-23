@@ -101,16 +101,10 @@ export default function Register() {
               className="w-full px-4 py-4 border text-black border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
-              type="text"
+              type="date"
               name="birth_date"
               placeholder="年/月/日"
               value={formData.birth_date}
-              onFocus={(e) => ((e.target as HTMLInputElement).type = "date")}
-              onBlur={(e) => {
-                if (!(e.target as HTMLInputElement).value) {
-                  (e.target as HTMLInputElement).type = "text";
-                }
-              }}
               onChange={handleChange}
               className="w-full px-4 py-4 border text-black border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
