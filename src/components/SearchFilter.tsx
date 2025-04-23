@@ -131,8 +131,8 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
                 />
               </svg>
             </div>
-            <div>
-              <div className="text-black text-sm">勤務地</div>
+            <div className="flex flex-col items-start">
+              <div className="text-black text-sm font-bold">勤務地</div>
               <div>{locationFilter.label}</div>
             </div>
           </div>
@@ -168,8 +168,8 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
                 />
               </svg>
             </div>
-            <div>
-              <div className="text-black text-sm">職種</div>
+            <div className="flex flex-col items-start">
+              <div className="text-black text-sm font-bold">職種</div>
               <div>{jobTypeFilter.label}</div>
             </div>
           </div>
@@ -205,8 +205,8 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
                 />
               </svg>
             </div>
-            <div>
-              <div className="text-black text-sm">働き方</div>
+            <div className="flex flex-col items-start">
+              <div className="text-black text-sm font-bold">働き方</div>
               <div>{workStyleFilter.label}</div>
             </div>
           </div>
