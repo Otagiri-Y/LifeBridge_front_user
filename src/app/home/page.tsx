@@ -73,13 +73,13 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-sm mb-4 p-4">
-      <h3 className="text-lg font-semibold mb-1">{job.job_title}</h3>
-      <p className="text-sm text-gray-600 mb-2">{job.company_name}</p>
+      <h3 className="text-lg text-black font-semibold mb-1">{job.job_title}</h3>
+      <p className="text-sm text-black mb-2">{job.company_name}</p>
 
       <div className="flex items-center mb-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 mr-1 text-gray-500"
+          className="h-4 w-4 mr-1 text-black"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -97,13 +97,13 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        <span className="text-sm">{job.work_location}</span>
+        <span className="text-sm text-black">{job.work_location}</span>
       </div>
 
       <div className="flex items-center mb-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 mr-1 text-gray-500"
+          className="h-4 w-4 mr-1 text-black"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -115,26 +115,26 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <span className="text-sm">{formatSalary(job.salary)}</span>
+        <span className="text-sm text-black">{formatSalary(job.salary)}</span>
       </div>
 
       <div className="mb-3">
-        <p className="text-sm font-medium mb-1">
+        <p className="text-sm text-black font-bold mb-1">
           この仕事に活かせる経験・スキル
         </p>
         <div className="flex flex-wrap gap-1">
           {job.skill_1 && (
-            <span className="bg-gray-200 text-xs px-2 py-1 rounded">
+            <span className="bg-gray-200 text-xs text-black px-2 py-1 rounded">
               {job.skill_1}
             </span>
           )}
           {job.skill_2 && (
-            <span className="bg-gray-200 text-xs px-2 py-1 rounded">
+            <span className="bg-gray-200 text-xs text-black px-2 py-1 rounded">
               {job.skill_2}
             </span>
           )}
           {job.skill_3 && (
-            <span className="bg-gray-200 text-xs px-2 py-1 rounded">
+            <span className="bg-gray-200 text-xs text-black px-2 py-1 rounded">
               {job.skill_3}
             </span>
           )}
@@ -145,10 +145,13 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
       </div>
 
       <div className="mb-3">
-        <p className="text-sm font-medium mb-1">仕事概要</p>
+        <p className="text-sm text-black font-bold mb-1">仕事概要</p>
         <div className="flex flex-wrap gap-1">
           {summaryTags.map((tag, index) => (
-            <span key={index} className="bg-gray-200 text-xs px-2 py-1 rounded">
+            <span
+              key={index}
+              className="bg-gray-200 text-xs text-black px-2 py-1 rounded"
+            >
               {tag}
             </span>
           ))}
@@ -156,20 +159,20 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
       </div>
 
       <div className="mb-4">
-        <p className="text-sm font-medium mb-1">仕事内容</p>
-        <p className="text-sm">{job.job_description}</p>
+        <p className="text-sm text-black font-bold mb-1">仕事内容</p>
+        <p className="text-sm text-black">{job.job_description}</p>
       </div>
 
       <div className="flex flex-col gap-2">
         <Link
           href={`/personal_job_detail/`}
-          className="w-full bg-primary-navy text-white text-center py-3 rounded font-medium"
+          className="w-full bg-primary-navy text-white text-center py-3 rounded font-bold"
         >
           オファーする
         </Link>
         <Link
           href={`/personal_occupation`}
-          className="w-full border border-gray-300 text-center py-3 rounded font-medium"
+          className="w-full border border-gray-500 text-blue-900 text-center py-3 rounded font-bold"
         >
           条件を変更する
         </Link>
@@ -327,10 +330,12 @@ export default function Home() {
         {/* 見出し */}
         {!loading && !error && jobs.length > 0 && (
           <div className="my-4 text-center">
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-lg text-black font-semibold">
               Life Bridgeがあなたと企業をマッチング
             </h2>
-            <h3 className="text-xl font-bold">あなたの志向に合った求人</h3>
+            <h3 className="text-xl text-black font-bold">
+              あなたの志向に合った求人
+            </h3>
           </div>
         )}
         {/* ローディング表示 */}
@@ -350,8 +355,8 @@ export default function Home() {
         {/* 検索結果がない場合 */}
         {!loading && !error && jobs.length === 0 && (
           <div className="text-center py-10">
-            <p className="text-gray-600">前回の検索条件</p>
-            <p className="text-gray-800 font-semibold">結果は見つかりません</p>
+            <p className="text-black">前回の検索条件</p>
+            <p className="text-black font-semibold">結果は見つかりません</p>
           </div>
         )}
 

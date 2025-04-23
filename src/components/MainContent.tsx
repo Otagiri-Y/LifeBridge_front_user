@@ -9,8 +9,10 @@ export default function MainContent() {
       {/* 上部の薄い青色エリア - 幅を広げる */}
       <section className="bg-secondary-blue rounded-lg p-5 mb-5">
         <div className="text-center mb-3">
-          <h2 className="text-xl font-bold mb-1">あなたの力が誰かの力に</h2>
-          <p className="text-gray-600">セカンドキャリアの充実をサポート</p>
+          <h2 className="text-xl text-black font-bold mb-1">
+            あなたの力が誰かの力に
+          </h2>
+          <p className="text-black">セカンドキャリアの充実をサポート</p>
         </div>
 
         {/* 紺色のカード - 画像が収まるよう横幅を拡張 */}

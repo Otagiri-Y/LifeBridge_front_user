@@ -104,16 +104,16 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
   return (
     <div className="flex flex-col space-y-4">
       {/* 勤務地フィルター */}
-      <div className="border rounded-lg">
+      <div className="border border-gray-500 rounded-lg">
         <button
-          className="w-full py-4 px-4 flex items-center justify-between"
+          className="w-full py-4 px-4 flex items-center justify-between text-black"
           onClick={() => setShowLocationModal(true)}
         >
           <div className="flex items-center">
             <div className="w-6 h-6 mr-2 flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
-                className="w-5 h-5 text-gray-500"
+                className="w-5 h-5 text-black"
                 fill="none"
                 stroke="currentColor"
               >
@@ -132,25 +132,25 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
               </svg>
             </div>
             <div>
-              <div className="text-gray-500 text-sm">勤務地</div>
+              <div className="text-black text-sm">勤務地</div>
               <div>{locationFilter.label}</div>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-gray-400" />
+          <ChevronRight className="h-5 w-5 text-black" />
         </button>
       </div>
 
       {/* 職種フィルター */}
-      <div className="border rounded-lg">
+      <div className="border border-gray-500 rounded-lg">
         <button
-          className="w-full py-4 px-4 flex items-center justify-between"
+          className="w-full py-4 px-4 flex items-center justify-between text-black"
           onClick={() => setShowJobTypeModal(true)}
         >
           <div className="flex items-center">
             <div className="w-6 h-6 mr-2 flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
-                className="w-5 h-5 text-gray-500"
+                className="w-5 h-5 text-black"
                 fill="none"
                 stroke="currentColor"
               >
@@ -169,25 +169,25 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
               </svg>
             </div>
             <div>
-              <div className="text-gray-500 text-sm">職種</div>
+              <div className="text-black text-sm">職種</div>
               <div>{jobTypeFilter.label}</div>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-gray-400" />
+          <ChevronRight className="h-5 w-5 text-black" />
         </button>
       </div>
 
       {/* 働き方フィルター */}
-      <div className="border rounded-lg">
+      <div className="border border-gray-500 rounded-lg">
         <button
-          className="w-full py-4 px-4 flex items-center justify-between"
+          className="w-full py-4 px-4 flex items-center justify-between text-black"
           onClick={() => setShowWorkStyleModal(true)}
         >
           <div className="flex items-center">
             <div className="w-6 h-6 mr-2 flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
-                className="w-5 h-5 text-gray-500"
+                className="w-5 h-5 text-black"
                 fill="none"
                 stroke="currentColor"
               >
@@ -206,11 +206,11 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
               </svg>
             </div>
             <div>
-              <div className="text-gray-500 text-sm">働き方</div>
+              <div className="text-black text-sm">働き方</div>
               <div>{workStyleFilter.label}</div>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-gray-400" />
+          <ChevronRight className="h-5 w-5 text-black" />
         </button>
       </div>
 
@@ -228,7 +228,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
 
       {/* リセットボタン */}
       <button
-        className="border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold py-3 px-4 rounded-lg w-full"
+        className="border border-gray-500 hover:bg-gray-100 text-blue-900 font-bold py-3 px-4 rounded-lg w-full"
         onClick={handleReset}
       >
         リセット
@@ -236,7 +236,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch, onReset }) => {
 
       {/* モーダルコンポーネント */}
       <FilterModal
-        title="勤務地"
+        title="勤務地 "
         options={locationOptions}
         selectedValue={locationFilter.value}
         onSelect={handleLocationSelect}

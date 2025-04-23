@@ -18,8 +18,8 @@ const UndevelopedScreen: React.FC<UndevelopedScreenProps> = ({
   if (!hasMessages) {
     return (
       <div className="flex flex-col items-center text-center p-6">
-        <h2 className="text-xl font-bold mb-4">鋭意開発中です</h2>
-        <p className="text-gray-500 mb-8">
+        <h2 className="text-xl font-bold mb-4 text-black">鋭意開発中です</h2>
+        <p className="text-black mb-8">
           大変申し訳ありませんが、
           <br />
           今後の実装をお待ちください。
@@ -38,7 +38,7 @@ const UndevelopedScreen: React.FC<UndevelopedScreenProps> = ({
         {/* 閉じるボタンは画像の後に表示 */}
         <a
           href="home"
-          className="border border-gray-300 rounded-md px-8 py-3 text-gray-700 hover:bg-gray-100 transition-colors inline-block"
+          className="border border-gray-500 rounded-md px-8 py-3 text-gray-700 hover:bg-gray-100 transition-colors inline-block"
         >
           閉じる
         </a>

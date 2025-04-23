@@ -109,11 +109,11 @@ export default function SalesDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
-      <main className="flex-grow px-4 pt-6 pb-20">
+      <main className="flex-grow px-4 pt-6 pb-20　text-black">
         <div className="mb-4">
           <button
             onClick={() => router.push(`/personal_occupation?userId=${userId}`)}
-            className="flex items-center text-xl font-semibold"
+            className="flex items-center text-xl text-black font-semibold"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +142,7 @@ export default function SalesDetail() {
           </button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mx-1 text-gray-400"
+            className="h-4 w-4 mx-1 text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -161,14 +161,14 @@ export default function SalesDetail() {
           <div className="relative">
             <input
               type="search"
-              className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full p-3 pl-10 text-sm text-black border border-gray-500 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="職種を検索する"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
-                className="w-4 h-4 text-gray-500"
+                className="w-4 h-4 text-black"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -196,7 +196,7 @@ export default function SalesDetail() {
           {filteredDetails.map((detail) => (
             <div
               key={detail.id}
-              className={`border-b border-gray-200 py-3 px-2 flex justify-between items-center cursor-pointer ${
+              className={`border-b border-gray-500 py-3 px-2 flex justify-between items-center cursor-pointer text-black ${
                 selectedDetail === detail.id ? "bg-blue-50" : ""
               }`}
               onClick={() => handleDetailSelect(detail.id, detail.name)}
@@ -204,7 +204,7 @@ export default function SalesDetail() {
               <div className="font-medium">{detail.name}</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 text-black"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >

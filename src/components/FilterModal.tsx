@@ -33,7 +33,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden">
         {/* モーダルヘッダー */}
         <div className="border-b p-4 flex justify-between items-center">
-          <h2 className="text-lg font-bold">{title}を選択</h2>
+          <h2 className="text-lg font-bold text-black">{title}を選択</h2>
           <button onClick={onClose} className="p-1">
             <X className="h-6 w-6" />
           </button>
@@ -44,7 +44,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <div className="divide-y">
             {/* 「指定なし」オプション */}
             <button
-              className={`w-full text-left p-4 hover:bg-gray-100 flex items-center ${
+              className={`w-full text-left p-4 text-black hover:bg-gray-500 flex items-center ${
                 selectedValue === null ? "bg-blue-50" : ""
               }`}
               onClick={() =>
@@ -61,7 +61,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             {options.map((option) => (
               <button
                 key={option.id}
-                className={`w-full text-left p-4 hover:bg-gray-100 flex items-center ${
+                className={`w-full text-left p-4 text-black hover:bg-gray-100 flex items-center ${
                   selectedValue === option.value ? "bg-blue-50" : ""
                 }`}
                 onClick={() => onSelect(option)}

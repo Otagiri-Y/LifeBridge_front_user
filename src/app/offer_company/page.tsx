@@ -89,7 +89,9 @@ export default function OfferCompanyList() {
 
         {/* タイトルとタブ切り替え */}
         <div className="px-4 py-3">
-          <h1 className="text-xl font-bold mb-3 text-center">オファーリスト</h1>
+          <h1 className="text-xl text-black font-bold mb-3 text-center">
+            オファーリスト
+          </h1>
 
           {/* タブ */}
           <div className="flex border-b">
@@ -98,13 +100,13 @@ export default function OfferCompanyList() {
               className={`flex-1 py-2 text-center ${
                 activeTab === "personal"
                   ? "text-bg-primary-navy border-b-2 border-blue-900 font-medium"
-                  : "text-gray-500"
+                  : "text-black"
               }`}
             >
               あなたのオファー
             </Link>
             <button
-              className="flex-1 py-2 text-center text-blue-900 border-b-4 border-blue-900 font-medium"
+              className="flex-1 py-2 text-center text-blue-900 border-b-4 border-blue-900 font-bold"
               onClick={() => setActiveTab("company")}
             >
               企業のオファー
@@ -117,34 +119,34 @@ export default function OfferCompanyList() {
           {jobOffers.map((job) => (
             <div key={job.id} className="bg-white rounded-lg shadow-md p-4">
               {/* 求人タイトルと会社名 */}
-              <h2 className="font-bold text-lg mb-1">{job.title}</h2>
-              <p className="text-gray-600 text-sm mb-2">{job.company}</p>
+              <h2 className="font-bold text-black text-lg mb-1">{job.title}</h2>
+              <p className="text-black text-sm mb-2">{job.company}</p>
 
               {/* 勤務地と給与 */}
               <div className="flex items-center mb-1">
                 <div className="w-4 h-4 mr-2">
                   <Image src="/map.svg" alt="勤務地" width={16} height={16} />
                 </div>
-                <span className="text-sm">{job.location}</span>
+                <span className="text-sm text-black">{job.location}</span>
               </div>
 
               <div className="flex items-center mb-3">
                 <div className="w-4 h-4 mr-2">
                   <Image src="/enn.svg" alt="給与" width={16} height={16} />
                 </div>
-                <span className="text-sm">{job.salary}</span>
+                <span className="text-sm text-black">{job.salary}</span>
               </div>
 
               {/* スキルと条件 */}
               <div className="mb-3">
-                <p className="text-sm font-medium mb-1">
+                <p className="text-sm text-black font-bold mb-1">
                   この仕事に活かせる経験・スキル
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {job.skills.map((skill, index) => (
                     <span
                       key={index}
-                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded"
+                      className="bg-gray-200 text-black text-xs px-2 py-1 rounded"
                     >
                       {skill}
                     </span>
@@ -153,12 +155,12 @@ export default function OfferCompanyList() {
               </div>
 
               <div className="mb-3">
-                <p className="text-sm font-medium mb-1">仕事概要</p>
+                <p className="text-sm text-black font-bold mb-1">仕事概要</p>
                 <div className="flex flex-wrap gap-1">
                   {job.conditions.map((condition, index) => (
                     <span
                       key={index}
-                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded"
+                      className="bg-gray-200 text-black text-xs px-2 py-1 rounded"
                     >
                       {condition}
                     </span>
@@ -167,19 +169,21 @@ export default function OfferCompanyList() {
               </div>
 
               {/* 仕事内容 */}
-              <p className="text-sm mb-3 line-clamp-3">{job.description}</p>
+              <p className="text-sm mb-3 text-black line-clamp-3">
+                {job.description}
+              </p>
 
               {/* ボタンエリア */}
               <div className="grid grid-cols-2 gap-2">
                 <Link
                   href={`/personal_job_detail`}
-                  className="py-2 px-4 border border-gray-500 rounded-md text-blue-900 hover:bg-gray-300 transition-colors text-center"
+                  className="py-2 px-4 border border-gray-500 rounded-md text-blue-900 hover:bg-gray-300 transition-colors text-center font-bold"
                 >
                   応募する
                 </Link>
                 <Link
                   href={`/personal_job_detail/`}
-                  className="bg-primary-navy text-white text-center py-2 px-4 rounded-md hover:bg-blue-800 transition-colors"
+                  className="bg-primary-navy text-white text-center py-2 px-4 rounded-md hover:bg-blue-800 transition-colors font-bold"
                 >
                   求人詳細を見る
                 </Link>

@@ -169,7 +169,7 @@ export default function WorkEnvironmentSelection() {
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow px-4 pt-6 pb-48">
+      <main className="flex-grow px-4 pt-6 pb-48 text-black">
         {/* 戻るボタン */}
         <div className="mb-4">
           <button
@@ -198,14 +198,14 @@ export default function WorkEnvironmentSelection() {
           <div className="relative">
             <input
               type="search"
-              className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full p-3 pl-10 text-sm text-black border border-gray-500 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="環境条件を検索"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
-                className="w-4 h-4 text-gray-500"
+                className="w-4 h-4 text-black"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -248,7 +248,7 @@ export default function WorkEnvironmentSelection() {
             return (
               <div key={category} className="space-y-2">
                 {/* カテゴリタイトル */}
-                <h3 className="font-medium text-gray-800">
+                <h3 className="font-bold text-black">
                   {categoryTitles[category]}
                 </h3>
                 {/* オプションの表示（2列グリッド） */}

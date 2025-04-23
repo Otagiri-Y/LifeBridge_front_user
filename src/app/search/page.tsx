@@ -39,7 +39,7 @@ export default function Search() {
 
         {/* 検索条件フィルター */}
         <div className="p-4">
-          <h1 className="text-2xl font-bold mb-4 text-center">求人を探す</h1>
+          <h1 className="text-2xl text-black font-bold mb-4 text-center">求人を探す</h1>
           <hr className="mb-4" />
 
           <SearchFilter onSearch={handleSearch} onReset={handleReset} />

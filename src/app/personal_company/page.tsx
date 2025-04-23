@@ -12,7 +12,8 @@ export default function PersonalCompany() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const handleNext = async () => {
     if (!companyName.trim()) {
@@ -38,7 +39,7 @@ export default function PersonalCompany() {
         },
         body: JSON.stringify({ company_name: companyName }),
       });
-      
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -67,7 +68,7 @@ export default function PersonalCompany() {
         <div className="mb-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center text-xl font-semibold"
+            className="flex items-center text-xl  text-black font-semibold"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +76,7 @@ export default function PersonalCompany() {
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6 mr-2"
+              className="w-6 h-6 mr-2 text-black"
             >
               <path
                 strokeLinecap="round"
@@ -99,7 +100,7 @@ export default function PersonalCompany() {
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="会社名を入力してください"
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-4 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 

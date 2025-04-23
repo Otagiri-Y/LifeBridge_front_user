@@ -127,8 +127,9 @@ function PersonalOccupationContent() {
       setError("認証情報が見つかりません。ログインし直してください。");
       return;
     }
-    
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+    const API_BASE_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     setLoading(true);
     setError("");
@@ -184,11 +185,11 @@ function PersonalOccupationContent() {
   };
 
   return (
-    <main className="flex-grow px-4 pt-4 pb-24">
+    <main className="flex-grow px-4 pt-4 pb-24 text-black">
       <div className="mb-4">
         <button
           onClick={() => router.back()}
-          className="flex items-center text-xl font-semibold"
+          className="flex items-center text-xl font-bold"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +212,7 @@ function PersonalOccupationContent() {
       <div className="relative mb-4">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
-            className="w-4 h-4 text-gray-500"
+            className="w-4 h-4 text-black"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -228,7 +229,7 @@ function PersonalOccupationContent() {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full p-3 pl-10 text-sm text-black border border-gray-500 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="職種を検索する"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -245,20 +246,20 @@ function PersonalOccupationContent() {
         {filteredJobs.map((job) => (
           <div
             key={job.id}
-            className={`border-b border-gray-200 py-3 px-2 flex justify-between items-center cursor-pointer ${
+            className={`border-b border-gray-500 py-3 px-2 flex justify-between items-center cursor-pointer ${
               selectedJobType === job.id ? "bg-blue-50" : ""
             }`}
             onClick={() => handleJobSelect(job.id, job.name)}
           >
             <div>
-              <div className="font-medium">{job.name}</div>
+              <div className="font-bold">{job.name}</div>
               {job.detail && (
                 <div className="text-xs text-gray-500">{job.detail}</div>
               )}
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 text-black"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -288,7 +289,7 @@ function PersonalOccupationContent() {
           onClick={handleNext}
           disabled={loading || !selectedJobType}
           className={`px-8 py-3 rounded-full text-white ${
-            selectedJobType ? "bg-primary-navy" : "bg-gray-400"
+            selectedJobType ? "bg-primary-navy" : "bg-gray-500"
           }`}
         >
           {loading ? "処理中..." : "次へ進む"}

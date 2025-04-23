@@ -107,7 +107,7 @@ export default function JobDetailMultipleSelection() {
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow px-4 pt-6 pb-20">
+      <main className="flex-grow px-4 pt-6 pb-20 text-black">
         <div className="mb-4">
           <button
             onClick={() => router.push(`/personal_plan?userId=${userId}`)}
@@ -115,7 +115,7 @@ export default function JobDetailMultipleSelection() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 mr-2"
+              className="w-6 h-6 mr-2  text-black"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -140,7 +140,7 @@ export default function JobDetailMultipleSelection() {
         <div className="mb-4">
           <input
             type="search"
-            className="w-full p-3 pl-10 text-sm border border-gray-300 rounded-lg"
+            className="w-full p-3 pl-10 text-sm border border-gray-500 rounded-lg text-black"
             placeholder="職種を検索する"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -168,7 +168,7 @@ export default function JobDetailMultipleSelection() {
                     } ${filtered.length === 1 ? "col-span-2" : ""}`}
                     onClick={() => handleDetailSelect(detail.id, detail.name)}
                   >
-                    <div className="w-6 h-6 mr-3 border border-gray-300 flex items-center justify-center bg-white">
+                    <div className="w-6 h-6 mr-3 border border-gray-500 flex items-center justify-center bg-white">
                       {selectedDetails.includes(detail.id) && (
                         <svg
                           className="h-5 w-5 text-blue-500"
